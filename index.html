@@ -3,899 +3,1074 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Saransh Nijhawan — Portfolio</title>
-  <!-- Google Fonts -->
+  <title>Saransh Nijhawan — Quant & ML Engineer</title>
+  <meta name="description" content="Portfolio of Saransh Nijhawan — Mathematics & Computing student at DTU specializing in Quantitative Finance, Machine Learning, and AI Platform Engineering.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <!-- FontAwesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
   <style>
-    :root {
-      --bg: #090a0f;
-      --card-bg: rgba(17, 19, 31, 0.65);
-      --border: rgba(255, 255, 255, 0.06);
-      --border-hover: rgba(255, 165, 0, 0.25);
-      --text-primary: #e8eaed;
-      --text-secondary: #9aa0a6;
-      --amber: #ffa500;
-      --amber-glow: rgba(255, 165, 0, 0.15);
-      --blue: #38bdf8;
-      --green: #00e676;
-      --font-outfit: 'Outfit', sans-serif;
-      --font-mono: 'IBM Plex Mono', monospace;
+    /* ── Custom Cursor ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { cursor: none !important; scroll-behavior: smooth; }
+    body { cursor: none !important; }
+    a, button, [onclick] { cursor: none !important; }
+
+    #cursor-dot {
+      width: 8px; height: 8px;
+      background: #00ff88;
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, background 0.2s;
+      mix-blend-mode: difference;
+    }
+    #cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid rgba(0,255,136,0.5);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.12s ease, width 0.2s, height 0.2s, border-color 0.2s;
+    }
+    #cursor-ring.hovering {
+      width: 56px; height: 56px;
+      border-color: rgba(0,255,136,0.9);
+      background: rgba(0,255,136,0.04);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      scroll-behavior: smooth;
+    /* ── Variables ── */
+    :root {
+      --bg: #04070d;
+      --surface: rgba(8,14,26,0.85);
+      --border: rgba(0,255,136,0.1);
+      --border-hover: rgba(0,255,136,0.35);
+      --text: #c8d6e0;
+      --text-dim: #5a7080;
+      --green: #00ff88;
+      --green-dim: rgba(0,255,136,0.12);
+      --amber: #ffaa00;
+      --blue: #38b2f8;
+      --red: #ff4466;
+      --mono: 'Space Mono', monospace;
+      --sans: 'Space Grotesk', sans-serif;
     }
 
     body {
-      background-color: var(--bg);
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(255, 165, 0, 0.03) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.03) 0%, transparent 40%);
-      color: var(--text-primary);
-      font-family: var(--font-outfit);
-      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
       overflow-x: hidden;
+      line-height: 1.6;
     }
 
-    /* ── Layout Grid ── */
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    /* ── Header & Navigation ── */
-    header {
+    /* ── Canvas Background ── */
+    #bg-canvas {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: rgba(9, 10, 15, 0.8);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      z-index: 1000;
-      transition: all 0.3s ease;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      opacity: 0.35;
     }
 
-    .nav-container {
+    /* ── Loader ── */
+    #loader {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      z-index: 10000;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      height: 70px;
+      justify-content: center;
+      gap: 20px;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+    #loader.gone { opacity: 0; visibility: hidden; }
+
+    .loader-text {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--green);
+      letter-spacing: 2px;
+    }
+    .loader-bar-wrap {
+      width: 200px;
+      height: 2px;
+      background: rgba(0,255,136,0.12);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .loader-bar {
+      height: 100%;
+      background: var(--green);
+      width: 0%;
+      transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 0 12px var(--green);
     }
 
-    .logo {
-      font-family: var(--font-mono);
-      font-weight: 700;
-      font-size: 1.25rem;
-      color: var(--amber);
-      text-decoration: none;
-      letter-spacing: -0.5px;
+    /* ── Layout ── */
+    .content { position: relative; z-index: 1; }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 32px;
     }
 
-    .nav-links {
+    /* ── Header ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 900;
+      border-bottom: 1px solid var(--border);
+      background: rgba(4,7,13,0.7);
+      backdrop-filter: blur(20px);
+    }
+    .nav-inner {
       display: flex;
-      gap: 32px;
-      list-style: none;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
     }
-
-    .nav-links a {
-      color: var(--text-secondary);
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--green);
       text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 400;
-      transition: color 0.2s ease;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-
-    .nav-links a:hover, .nav-links a.active {
-      color: var(--text-primary);
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    .nav-logo .dot { 
+      width: 7px; height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+      box-shadow: 0 0 8px var(--green);
     }
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1px;
+      background: var(--green);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-links a:hover::after { transform: scaleX(1); }
 
-    /* ── Hero Section ── */
+    /* ── Hero ── */
     #hero {
-      padding: 160px 0 100px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 100px 0 60px;
       position: relative;
     }
 
-    .hero-content {
-      max-width: 800px;
-    }
-
-    .hero-tag {
-      font-family: var(--font-mono);
-      color: var(--amber);
-      font-size: 0.95rem;
-      font-weight: 500;
+    .hero-status {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--green);
+      letter-spacing: 3px;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+    .status-blink {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: blink 1.2s infinite;
+      box-shadow: 0 0 6px var(--green);
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .hero-name {
+      font-family: var(--sans);
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -3px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .hero-name .line1 { display: block; color: #ffffff; }
+    .hero-name .line2 {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(0,255,136,0.6);
+    }
+    .hero-name .glitch {
+      position: relative;
       display: inline-block;
-      border: 1px solid rgba(255, 165, 0, 0.2);
-      padding: 4px 12px;
-      border-radius: 20px;
-      background: rgba(255, 165, 0, 0.04);
+    }
+    .hero-name .glitch::before,
+    .hero-name .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .hero-name .glitch::before {
+      color: var(--red);
+      clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+      transform: translateX(-3px);
+      animation: glitch-top 4s infinite;
+    }
+    .hero-name .glitch::after {
+      color: var(--blue);
+      clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+      transform: translateX(3px);
+      animation: glitch-bot 4s infinite;
+    }
+    @keyframes glitch-top {
+      0%,90%,100%{transform:translateX(0); opacity:0}
+      91%{transform:translateX(-3px); opacity:0.7}
+      93%{transform:translateX(3px); opacity:0.5}
+      95%{transform:translateX(-3px); opacity:0.7}
+    }
+    @keyframes glitch-bot {
+      0%,90%,100%{transform:translateX(0); opacity:0}
+      92%{transform:translateX(3px); opacity:0.6}
+      94%{transform:translateX(-3px); opacity:0.5}
+      96%{transform:translateX(3px); opacity:0.6}
     }
 
-    .hero-title {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -1.5px;
-      margin-bottom: 24px;
-      background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 50%, #9aa0a6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .hero-role {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
+    .hero-role .sep { color: var(--green); }
 
     .hero-desc {
-      font-size: clamp(1.1rem, 2vw, 1.3rem);
-      color: var(--text-secondary);
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      max-width: 620px;
+      line-height: 1.7;
+      margin-bottom: 48px;
       font-weight: 300;
-      margin-bottom: 40px;
-      line-height: 1.5;
     }
+    .hero-desc strong { color: var(--text); font-weight: 500; }
 
-    .hero-desc strong {
-      color: var(--text-primary);
-      font-weight: 600;
-    }
-
-    .btn-group {
+    .hero-ctas {
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 12px 28px;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 600;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 700;
       text-decoration: none;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: pointer;
+      letter-spacing: 1px;
+      padding: 14px 28px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      border: none;
     }
-
     .btn-primary {
-      background: var(--amber);
-      color: #000000;
+      background: var(--green);
+      color: #04070d;
     }
-
     .btn-primary:hover {
-      background: #e69500;
+      background: #00e07a;
+      box-shadow: 0 0 20px rgba(0,255,136,0.4), 0 0 40px rgba(0,255,136,0.15);
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(255, 165, 0, 0.25);
     }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.03);
-      color: var(--text-primary);
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
       border: 1px solid var(--border);
     }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.15);
+    .btn-outline:hover {
+      border-color: var(--border-hover);
+      color: var(--green);
       transform: translateY(-2px);
     }
-
-    /* ── Sections Common ── */
-    section {
-      padding: 100px 0;
-      border-top: 1px solid var(--border);
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-dim);
+      padding: 14px 0;
     }
+    .btn-ghost:hover { color: var(--text); }
 
-    .section-title {
-      font-size: 2.25rem;
-      font-weight: 800;
-      letter-spacing: -0.75px;
-      margin-bottom: 48px;
+    /* ── Ticker ── */
+    .ticker-wrap {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      padding: 10px 0;
+      position: relative;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 60px;
+      animation: ticker 25s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-item {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-dim);
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 8px;
+    }
+    .ticker-item .up { color: var(--green); }
+    .ticker-item .down { color: var(--red); }
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
 
-    .section-title::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+    /* ── Section base ── */
+    section {
+      padding: 120px 0;
+      position: relative;
+    }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--green);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::before {
+      content: '//';
+      opacity: 0.5;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 64px;
+      color: #fff;
     }
 
-    /* ── Glassmorphic Cards ── */
+    /* ── Cards ── */
     .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 32px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
       position: relative;
       overflow: hidden;
     }
-
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s;
+    }
     .card:hover {
       border-color: var(--border-hover);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 165, 0, 0.02);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px var(--border-hover);
     }
+    .card:hover::before { transform: scaleX(1); }
 
-    /* ── Projects Grid ── */
-    .projects-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
+    /* ── Projects ── */
+    .project-grid { display: flex; flex-direction: column; gap: 28px; }
 
     .project-card {
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 40px;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
     }
+    @media(max-width:768px){ .project-card { grid-template-columns: 1fr; } }
 
-    @media (max-width: 768px) {
-      .project-card {
-        grid-template-columns: 1fr;
-        gap: 24px;
-      }
-    }
-
-    .project-info {
+    .project-left { padding: 40px; border-right: 1px solid var(--border); }
+    .project-right {
+      padding: 32px;
+      background: rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
     }
-
-    .project-header {
+    .project-num {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--green);
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+    .project-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .project-stack {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--green);
       margin-bottom: 20px;
     }
-
-    .project-title {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .project-stack {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--amber);
-      font-weight: 500;
-    }
-
     .project-desc {
-      color: var(--text-secondary);
-      font-size: 0.98rem;
-      margin-bottom: 24px;
-      line-height: 1.6;
-    }
-
-    .project-desc ul {
-      list-style-position: inside;
-      margin-top: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .project-desc li {
-      color: var(--text-secondary);
+      color: var(--text-dim);
       font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 28px;
     }
-
-    .project-links {
-      display: flex;
-      gap: 16px;
-    }
-
-    .project-links a {
-      color: var(--text-secondary);
+    .project-desc li { margin-bottom: 6px; padding-left: 4px; }
+    .project-actions { display: flex; gap: 16px; }
+    .proj-link {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-dim);
       text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 600;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 6px;
-      transition: color 0.2s ease;
+      letter-spacing: 1px;
+      transition: color 0.2s;
     }
+    .proj-link:hover { color: var(--green); }
 
-    .project-links a:hover {
-      color: var(--text-primary);
+    .code-block {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      line-height: 1.8;
+      color: rgba(0,255,136,0.45);
+      white-space: pre;
+      overflow: hidden;
     }
+    .code-block .c-kw { color: #61afef; }
+    .code-block .c-fn { color: #98c379; }
+    .code-block .c-str { color: #e5c07b; }
+    .code-block .c-cm { color: rgba(255,255,255,0.2); }
+    .code-block .c-num { color: #d19a66; }
 
-    .project-visual {
-      background: rgba(255, 255, 255, 0.01);
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 200px;
-      position: relative;
-    }
-
-    .visual-glow {
-      position: absolute;
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: var(--amber);
-      filter: blur(80px);
-      opacity: 0.15;
-    }
-
-    .visual-code {
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      color: rgba(255, 255, 255, 0.4);
+    /* ── Other repos mini-cards ── */
+    .repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 20px; }
+    .repo-card {
       padding: 24px;
-      white-space: pre-wrap;
-      width: 100%;
-    }
-
-    /* ── Subprojects Grid ── */
-    .sub-projects-title {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin: 40px 0 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .sub-projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
-    }
-
-    .sub-project-card {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      padding: 24px;
-      min-height: 250px;
-    }
-
-    .sub-project-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 6px;
-    }
-
-    .sub-project-stack {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--amber);
-      margin-bottom: 12px;
-    }
-
-    .sub-project-desc {
-      color: var(--text-secondary);
-      font-size: 0.92rem;
-      margin-bottom: 20px;
-    }
-
-    /* ── Skills Section ── */
-    .skills-wrapper {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 32px;
-    }
-
-    .skills-category-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
       gap: 10px;
     }
-
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+    .repo-name { font-size: 1.05rem; font-weight: 600; color: #fff; }
+    .repo-stack { font-family: var(--mono); font-size: 0.75rem; color: var(--green); }
+    .repo-desc { font-size: 0.9rem; color: var(--text-dim); flex: 1; }
+    .repo-link {
+      font-family: var(--mono); font-size: 0.75rem;
+      color: var(--text-dim); text-decoration: none;
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s; margin-top: 4px;
     }
+    .repo-link:hover { color: var(--green); }
 
-    .skill-chip {
-      background: rgba(255, 255, 255, 0.02);
+    /* ── Skills ── */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 24px; }
+    .skill-group-title {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--green);
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(0,255,136,0.03);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 4px;
       padding: 8px 14px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 0.875rem;
+      color: var(--text-dim);
+      transition: all 0.2s;
     }
-
-    .skill-chip i {
-      font-size: 1.05rem;
-      transition: transform 0.2s ease;
-    }
-
-    .skill-chip:hover {
-      background: rgba(255, 165, 0, 0.03);
+    .chip i { font-size: 1rem; }
+    .chip:hover {
       border-color: var(--border-hover);
-      color: var(--text-primary);
+      color: var(--text);
+      background: rgba(0,255,136,0.06);
       transform: translateY(-2px);
     }
 
-    .skill-chip:hover i {
-      transform: scale(1.15);
-    }
+    /* ── Profile ── */
+    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    @media(max-width:768px){ .profile-grid { grid-template-columns: 1fr; } }
 
-    /* ── Achievements & Leadership Grid ── */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
-
-    @media (max-width: 768px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .timeline-item {
-      position: relative;
-      padding-left: 24px;
-      border-left: 2px solid var(--border);
-      margin-bottom: 32px;
-    }
-
-    .timeline-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .timeline-item::after {
-      content: '';
-      position: absolute;
-      left: -6px;
-      top: 6px;
-      width: 10px;
-      height: 10px;
+    .timeline { display: flex; flex-direction: column; gap: 28px; }
+    .t-item { display: flex; gap: 20px; }
+    .t-line { display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .t-dot {
+      width: 10px; height: 10px; min-height: 10px;
       border-radius: 50%;
-      background: var(--amber);
-      border: 2px solid var(--bg);
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      margin-top: 4px;
     }
+    .t-pipe { width: 1px; flex: 1; background: var(--border); margin-top: 8px; min-height: 30px; }
+    .t-content {}
+    .t-role { font-size: 1.05rem; font-weight: 600; color: #fff; }
+    .t-org { font-family: var(--mono); font-size: 0.8rem; color: var(--green); margin: 4px 0 8px; }
+    .t-desc { font-size: 0.9rem; color: var(--text-dim); }
 
-    .timeline-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .timeline-sub {
-      font-size: 0.9rem;
-      color: var(--amber);
-      font-weight: 500;
-      margin-bottom: 12px;
-      font-family: var(--font-mono);
-    }
-
-    .timeline-desc {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-    }
-
-    .achievement-card {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-      margin-bottom: 24px;
-    }
-
-    .achievement-card:last-child {
-      margin-bottom: 0;
-    }
-
-    .achievement-icon {
-      font-size: 1.5rem;
-      color: var(--amber);
-      margin-top: 2px;
-      flex-shrink: 0;
-    }
-
-    .achievement-info h4 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .achievement-info p {
-      font-size: 0.93rem;
-      color: var(--text-secondary);
-    }
+    .award-list { display: flex; flex-direction: column; gap: 24px; }
+    .award-item { display: flex; gap: 16px; }
+    .award-icon { color: var(--amber); font-size: 1.3rem; margin-top: 2px; flex-shrink: 0; }
+    .award-title { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .award-desc { font-size: 0.9rem; color: var(--text-dim); }
 
     /* ── Footer ── */
     footer {
-      padding: 60px 0;
       border-top: 1px solid var(--border);
-      text-align: center;
+      padding: 60px 0;
     }
-
-    .footer-links {
+    .footer-inner {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
       gap: 24px;
-      margin-bottom: 24px;
     }
-
+    .footer-name {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+    .footer-name strong { color: var(--green); }
+    .footer-links { display: flex; gap: 20px; }
     .footer-links a {
-      color: var(--text-secondary);
-      font-size: 1.5rem;
-      transition: color 0.2s ease, transform 0.2s ease;
+      color: var(--text-dim);
+      font-size: 1.2rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .footer-links a:hover { color: var(--green); transform: translateY(-3px); }
+
+    /* ── Divider ── */
+    .hr { height: 1px; background: var(--border); margin: 0; }
+
+    /* ── Reveal animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .footer-links a:hover {
-      color: var(--amber);
-      transform: translateY(-2px);
-    }
-
-    .footer-copy {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-    }
-
-    .footer-copy strong {
-      color: var(--amber);
-      font-weight: 700;
+    /* ── Scanlines overlay ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.04) 2px,
+        rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+      z-index: 9000;
     }
   </style>
 </head>
 <body>
 
+<!-- ── Custom Cursor ── -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- ── Loader ── -->
+<div id="loader">
+  <div class="loader-text">INITIALIZING SYSTEM...</div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
+  <div class="loader-text" id="loader-pct">0%</div>
+</div>
+
+<!-- ── Background Canvas ── -->
+<canvas id="bg-canvas"></canvas>
+
+<div class="content">
   <!-- ── Header ── -->
   <header>
-    <div class="container nav-container">
-      <a href="#" class="logo">SARANSH_NIJHAWAN</a>
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="dot"></span>SN.EXE
+      </a>
       <ul class="nav-links">
-        <li><a href="#hero" class="active">Home</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#skills">Skills</a></li>
-        <li><a href="#timeline">Profile</a></li>
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="YOUR_RESUME_LINK_HERE" target="_blank">Resume ↗</a></li>
       </ul>
     </div>
   </header>
 
-  <!-- ── Hero Section ── -->
+  <!-- ── Hero ── -->
   <section id="hero">
-    <div class="container hero-content">
-      <span class="hero-tag">Mathematics & Computing</span>
-      <h1 class="hero-title">Engineering Quantitative Models & AI Platform Pipelines.</h1>
+    <div class="container">
+      <div class="hero-status">
+        <span class="status-blink"></span>
+        Final Year · DTU Mathematics &amp; Computing · Available for Opportunities
+      </div>
+      <h1 class="hero-name">
+        <span class="line1 glitch" data-text="SARANSH">SARANSH</span>
+        <span class="line2">NIJHAWAN</span>
+      </h1>
+      <div class="hero-role">
+        <span>Quant &amp; ML Engineer</span>
+        <span class="sep">//</span>
+        <span>Risk Platform Builder</span>
+        <span class="sep">//</span>
+        <span>AI Systems</span>
+      </div>
       <p class="hero-desc">
-        I am a final year <strong>Mathematics & Computing</strong> student at <strong>Delhi Technological University (DTU)</strong>. I specialize in building robust statistical engines, applying machine learning models to market forecasts, and structuring quantitative financial risk optimizers.
+        Building <strong>quantitative risk engines</strong>, statistical forecasting pipelines, and ML-powered data platforms. Interested in <strong>Quant Finance, MLE</strong>, and applied AI.
       </p>
-      <div class="btn-group">
-        <a href="#projects" class="btn btn-primary"><i class="fa-solid fa-code"></i> View Projects</a>
-        <a href="https://github.com/SaranshAI13" target="_blank" class="btn btn-secondary"><i class="fa-brands fa-github"></i> GitHub Profile</a>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-primary"><i class="fa-solid fa-arrow-down"></i> View Work</a>
+        <a href="https://github.com/SaranshAI13" target="_blank" class="btn btn-outline"><i class="fa-brands fa-github"></i> GitHub</a>
+        <a href="YOUR_RESUME_LINK_HERE" target="_blank" class="btn btn-outline"><i class="fa-solid fa-file-pdf"></i> Resume.pdf</a>
+        <a href="https://linkedin.com/in/saransh-nijhawan" target="_blank" class="btn btn-ghost"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
       </div>
     </div>
   </section>
 
-  <!-- ── Projects Section ── -->
+  <!-- ── Ticker ── -->
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="ticker"></div>
+  </div>
+
+  <!-- ── Projects ── -->
   <section id="projects">
     <div class="container">
-      <h2 class="section-title"><i class="fa-solid fa-laptop-code" style="color: var(--amber);"></i> Core Projects</h2>
-      
-      <div class="projects-grid">
-        
-        <!-- Project 1: MARI -->
-        <div class="card project-card">
-          <div class="project-info">
-            <div class="project-header">
-              <h3 class="project-title">Multi-Asset Risk Intelligence [MARI™]</h3>
-              <span class="project-stack">Python · FastAPI · React.js · Scikit-Learn · SciPy</span>
-            </div>
-            <div class="project-desc">
-              <p>An enterprise-grade quantitative risk dashboard and model execution engine. It processes historical datasets to solve optimal portfolio allocations and forecast short-horizon volatility using hybrid statistical-ML pipelines.</p>
-              <ul>
-                <li>Forecasts 5-day forward realized volatility comparing classical econometric <strong>GARCH(1,1)</strong> models with a <strong>Gradient Boosting Regressor</strong> using 14 engineered technical indicators.</li>
-                <li>Solves optimal portfolio allocations under <strong>Max Sharpe</strong> and <strong>Risk Parity</strong> constraints, integrating **Ledoit-Wolf Covariance Shrinkage** to denoise covariance estimation.</li>
-                <li>Implements real-time **SHAP local explainability** plots and K-Means clustering to classify market risk regimes.</li>
-              </ul>
-            </div>
-            <div class="project-links">
-              <a href="https://github.com/SaranshAI13/Multi-Asset-Risk-Intelligence-Platform-MARI-" target="_blank"><i class="fa-brands fa-github"></i> Source Code</a>
-              <a href="https://multi-asset-risk-intelligence-platf.vercel.app" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>
+      <div class="section-label">Selected Work</div>
+      <h2 class="section-title">Core Projects</h2>
+
+      <div class="project-grid">
+
+        <!-- MARI -->
+        <div class="card project-card reveal">
+          <div class="project-left">
+            <div class="project-num">01 / LIVE</div>
+            <h3 class="project-name">Multi-Asset Risk Intelligence [MARI™]</h3>
+            <div class="project-stack">Python · FastAPI · React.js · Scikit-Learn · SciPy · SHAP</div>
+            <ul class="project-desc">
+              <li>Forecasts 5-day volatility comparing <strong>GARCH(1,1)</strong> vs Gradient Boosting Regressor across 32 global assets.</li>
+              <li>Solves <strong>Max Sharpe &amp; Risk Parity</strong> portfolio allocation using Ledoit-Wolf Covariance Shrinkage.</li>
+              <li>Real-time SHAP explainability plots and K-Means regime classification.</li>
+            </ul>
+            <div class="project-actions">
+              <a class="proj-link" href="https://github.com/SaranshAI13/Multi-Asset-Risk-Intelligence-Platform-MARI-" target="_blank"><i class="fa-brands fa-github"></i> SOURCE</a>
+              <a class="proj-link" href="https://multi-asset-risk-intelligence-platf.vercel.app" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> LIVE DEMO</a>
             </div>
           </div>
-          <div class="project-visual">
-            <div class="visual-glow"></div>
-            <div class="visual-code">
-# GARCH(1,1) Volatility Modeling
-model = arch_model(returns, vol='Garch', p=1, q=1)
-res = model.fit(update_freq=0)
-forecast = np.sqrt(res.forecast().variance.values[-1, 0] * 252)
+          <div class="project-right">
+            <div class="code-block"><span class="c-cm"># GARCH(1,1) Vol Modeling</span>
+<span class="c-kw">from</span> arch <span class="c-kw">import</span> arch_model
+model = <span class="c-fn">arch_model</span>(
+  returns, vol=<span class="c-str">'Garch'</span>, p=<span class="c-num">1</span>, q=<span class="c-num">1</span>
+)
+res = model.<span class="c-fn">fit</span>(update_freq=<span class="c-num">0</span>)
 
-# Ledoit-Wolf Shrinkage
-shrunk_cov, delta = ledoit_wolf(returns.values)
-cov = shrunk_cov * 252
-            </div>
+<span class="c-cm"># Ledoit-Wolf Shrinkage</span>
+shrunk_cov, _ = <span class="c-fn">ledoit_wolf</span>(
+  returns.values
+)
+ann_cov = shrunk_cov * <span class="c-num">252</span>
+
+<span class="c-cm"># Max Sharpe Optimization</span>
+weights = <span class="c-fn">optimize_portfolio</span>(
+  mu, ann_cov, mode=<span class="c-str">'sharpe'</span>
+)</div>
           </div>
         </div>
 
-        <!-- Project 2: AutoEDA.AI -->
-        <div class="card project-card">
-          <div class="project-info">
-            <div class="project-header">
-              <h3 class="project-title">AutoEDA.AI</h3>
-              <span class="project-stack">Python · Streamlit · Scikit-Learn · Plotly · Pandas</span>
-            </div>
-            <div class="project-desc">
-              <p>A fully automated exploratory data analysis and machine learning training pipeline designed to deliver instant dataset diagnostics, outlier detection, and predictive modeling.</p>
-              <ul>
-                <li>Calculates a dynamic <strong>Data Health Score</strong> and renders interactive distribution plots, Pearson correlation matrices, and OLS regression trendlines.</li>
-                <li>Implements unsupervised anomaly flagging using an <strong>Isolation Forest</strong> algorithm with user-adjustable contamination rate thresholds.</li>
-                <li>Auto-detects ML tasks (regression vs. classification), performs data imputation/encoding, and trains baseline models vs. <strong>Random Forest Classifiers/Regressors</strong> for real-time form prediction.</li>
-              </ul>
-            </div>
-            <div class="project-links">
-              <a href="https://github.com/SaranshAI13/SmartEDA_AutoML" target="_blank"><i class="fa-brands fa-github"></i> Source Code</a>
-              <a href="https://autoeda-ai.streamlit.app" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>
+        <!-- AutoEDA -->
+        <div class="card project-card reveal">
+          <div class="project-left">
+            <div class="project-num">02 / LIVE</div>
+            <h3 class="project-name">AutoEDA.AI</h3>
+            <div class="project-stack">Python · Streamlit · Scikit-Learn · Plotly · Pandas</div>
+            <ul class="project-desc">
+              <li>Auto-calculates a <strong>Data Health Score</strong> with Pearson correlation matrix and OLS trendlines.</li>
+              <li>Anomaly detection via <strong>Isolation Forest</strong> with adjustable contamination threshold.</li>
+              <li>AutoML engine that detects task type, imputes, encodes, and trains <strong>Random Forest</strong> models vs baselines.</li>
+            </ul>
+            <div class="project-actions">
+              <a class="proj-link" href="https://github.com/SaranshAI13/SmartEDA_AutoML" target="_blank"><i class="fa-brands fa-github"></i> SOURCE</a>
+              <a class="proj-link" href="https://autoeda-ai.streamlit.app" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> LIVE DEMO</a>
             </div>
           </div>
-          <div class="project-visual">
-            <div class="visual-glow" style="background: var(--blue);"></div>
-            <div class="visual-code">
-# Outlier Detection via Isolation Forest
-iso = IsolationForest(contamination=contamination)
-outliers = iso.fit_predict(X_scaled)
-df['outlier'] = outliers
+          <div class="project-right">
+            <div class="code-block"><span class="c-cm"># Isolation Forest Anomaly Detect</span>
+iso = <span class="c-fn">IsolationForest</span>(
+  contamination=contamination,
+  random_state=<span class="c-num">42</span>
+)
+preds = iso.<span class="c-fn">fit_predict</span>(X_scaled)
 
-# AutoML Random Forest Model Training
-rf = RandomForestRegressor(n_estimators=100)
-rf.fit(X_train, y_train)
-importances = rf.feature_importances_
-            </div>
+<span class="c-cm"># AutoML Task Detection</span>
+<span class="c-kw">if</span> target.nunique() > <span class="c-num">10</span>:
+  model = <span class="c-fn">RandomForestRegressor</span>()
+<span class="c-kw">else</span>:
+  model = <span class="c-fn">RandomForestClassifier</span>()
+
+importance = model.feature_importances_</div>
           </div>
         </div>
 
-        <!-- Project 3: Salary Manager Pro -->
-        <div class="card project-card">
-          <div class="project-info">
-            <div class="project-header">
-              <h3 class="project-title">Salary Manager Pro</h3>
-              <span class="project-stack">Python · Flask · SQLite · JavaScript · openpyxl</span>
-            </div>
-            <div class="project-desc">
-              <p>A business ledger bookkeeping and attendance management platform built with MVC structure, designed for SMEs to execute proportional payroll calculations and secure database backups.</p>
-              <ul>
-                <li>Engineered a secure <strong>multi-tenant workspace</strong> isolation architecture, leveraging SQLite database partitions and SQLAlchemy ORM cascading deletion rules.</li>
-                <li>Built a <strong>double-entry bookkeeping system</strong> strictly mapping debit and credit parameters to track real-time employee balances and salary accruals.</li>
-                <li>Implements an asynchronous background daemon thread that compiles database metrics into formatted multi-sheet Excel workbooks and uploads backups to Google Drive.</li>
-              </ul>
-            </div>
-            <div class="project-links">
-              <a href="https://github.com/SaranshAI13/Salary-Manager-Pro" target="_blank"><i class="fa-brands fa-github"></i> Source Code</a>
-              <a href="https://saranshnijhawan.pythonanywhere.com" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>
+        <!-- Salary Manager -->
+        <div class="card project-card reveal">
+          <div class="project-left">
+            <div class="project-num">03 / LIVE</div>
+            <h3 class="project-name">Salary Manager Pro</h3>
+            <div class="project-stack">Python · Flask · SQLite · SQLAlchemy · JavaScript</div>
+            <ul class="project-desc">
+              <li>Multi-tenant <strong>workspace isolation</strong> with SQLite and cascading deletion rules via SQLAlchemy ORM.</li>
+              <li><strong>Double-entry bookkeeping</strong> ledger mapping CR/DR to track real-time employee dues.</li>
+              <li>Async background daemon compiling Excel reports and pushing to <strong>Google Drive</strong>.</li>
+            </ul>
+            <div class="project-actions">
+              <a class="proj-link" href="https://github.com/SaranshAI13/salary-manager" target="_blank"><i class="fa-brands fa-github"></i> SOURCE</a>
+              <a class="proj-link" href="https://saranshnijhawan.pythonanywhere.com" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> LIVE DEMO</a>
             </div>
           </div>
-          <div class="project-visual">
-            <div class="visual-glow" style="background: var(--green);"></div>
-            <div class="visual-code">
-# Double-Entry Ledger Calculation
-class LedgerEntry(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'))
-    type_ = db.Column(db.String(10))  # 'CR' or 'DR'
-    amount = db.Column(db.Integer)
-    is_salary = db.Column(db.Boolean, default=False)
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ── Section 2: Other Projects ── -->
-      <h3 class="sub-projects-title"><i class="fa-solid fa-folder-open" style="color: var(--amber);"></i> Other Repositories</h3>
-      
-      <div class="sub-projects-grid">
-        
-        <!-- Sub Project 1: Zomato Prediction -->
-        <div class="card sub-project-card">
-          <div>
-            <h4 class="sub-project-title">Zomato Delivery Time Prediction</h4>
-            <span class="sub-project-stack">Python · XGBoost · Flask · Pandas</span>
-            <p class="sub-project-desc">A Machine Learning model that predicts food delivery times using partner age, distance, and vehicle type. Deployed with a Flask backend for real-time web inference.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/SaranshAI13/Zomato-Time-Delivery-Prediction" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
-          </div>
-        </div>
-
-        <!-- Sub Project 2: IIT Gandhinagar Internship -->
-        <div class="card sub-project-card">
-          <div>
-            <h4 class="sub-project-title">IIT Gandhinagar Summer Internship (SRIP)</h4>
-            <span class="sub-project-stack">Python · Machine Learning · Jupyter</span>
-            <p class="sub-project-desc">Research-oriented data analysis and predictive modeling codebase completed during the Summer Research Internship Program at IIT Gandhinagar.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/SaranshAI13/Project-SRIP-Project-Number-IP0NB0000019-IIT-GDH-SUMMER-INTERN" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
-          </div>
-        </div>
-
-        <!-- Sub Project 3: EDA Amazon Sales -->
-        <div class="card sub-project-card">
-          <div>
-            <h4 class="sub-project-title">Amazon Sales Data EDA</h4>
-            <span class="sub-project-stack">Python · Jupyter · Matplotlib · Pandas</span>
-            <p class="sub-project-desc">Data profiling, discount analysis, ratings correlations, and data visualization on historical Amazon order datasets.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/SaranshAI13/EDA-Amazon-Sales-Data" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
+          <div class="project-right">
+            <div class="code-block"><span class="c-kw">class</span> <span class="c-fn">LedgerEntry</span>(db.Model):
+  id = db.Column(db.Integer,
+    primary_key=<span class="c-kw">True</span>)
+  employee_id = db.Column(
+    db.Integer,
+    db.<span class="c-fn">ForeignKey</span>(<span class="c-str">'employee.id'</span>))
+  type_ = db.Column(   <span class="c-cm"># CR / DR</span>
+    db.<span class="c-fn">String</span>(<span class="c-num">10</span>))
+  amount = db.Column(db.Integer)
+  is_salary = db.Column(
+    db.Boolean, default=<span class="c-kw">False</span>)</div>
           </div>
         </div>
 
       </div>
 
+      <!-- Other repos -->
+      <div style="margin-top:64px;">
+        <div class="section-label" style="margin-bottom:24px;">Also on GitHub</div>
+        <div class="repo-grid">
+          <div class="card repo-card reveal">
+            <div class="repo-name">Zomato Delivery Time Prediction</div>
+            <div class="repo-stack">Python · XGBoost · Flask · Pandas</div>
+            <p class="repo-desc">ML model predicting delivery times using distance, vehicle type, and partner age. Flask-deployed for real-time inference.</p>
+            <a class="repo-link" href="https://github.com/SaranshAI13/Zomato-Time-Delivery-Prediction" target="_blank"><i class="fa-brands fa-github"></i> VIEW REPO</a>
+          </div>
+          <div class="card repo-card reveal">
+            <div class="repo-name">IIT Gandhinagar SRIP Internship</div>
+            <div class="repo-stack">Python · ML Research · Jupyter</div>
+            <p class="repo-desc">Research modeling codebase from the Summer Research Internship Program at IIT Gandhinagar.</p>
+            <a class="repo-link" href="https://github.com/SaranshAI13/Project-SRIP-Project-Number-IP0NB0000019-IIT-GDH-SUMMER-INTERN" target="_blank"><i class="fa-brands fa-github"></i> VIEW REPO</a>
+          </div>
+          <div class="card repo-card reveal">
+            <div class="repo-name">Amazon Sales EDA</div>
+            <div class="repo-stack">Python · Pandas · Matplotlib · Jupyter</div>
+            <p class="repo-desc">Data profiling, discount analysis, and correlation visualizations on Amazon order datasets.</p>
+            <a class="repo-link" href="https://github.com/SaranshAI13/EDA-Amazon-Sales-Data" target="_blank"><i class="fa-brands fa-github"></i> VIEW REPO</a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ── Skills Section ── -->
+  <div class="hr"></div>
+
+  <!-- ── Skills ── -->
   <section id="skills">
     <div class="container">
-      <h2 class="section-title"><i class="fa-solid fa-brain" style="color: var(--amber);"></i> Technical Skills</h2>
-      
-      <div class="skills-wrapper">
-        
-        <!-- Category 1: Languages -->
-        <div class="card">
-          <h3 class="skills-category-title"><i class="fa-solid fa-code" style="color: var(--amber);"></i> Languages</h3>
-          <div class="skills-list">
-            <span class="skill-chip"><i class="fa-brands fa-python" style="color: #3776AB;"></i> Python</span>
-            <span class="skill-chip"><i class="fa-solid fa-laptop-code" style="color: #00599C;"></i> C++</span>
-            <span class="skill-chip"><i class="fa-solid fa-terminal" style="color: #555555;"></i> C</span>
-            <span class="skill-chip"><i class="fa-solid fa-database" style="color: #00758F;"></i> MySQL</span>
-            <span class="skill-chip"><i class="fa-solid fa-database" style="color: #336791;"></i> PostgreSQL</span>
-            <span class="skill-chip"><i class="fa-solid fa-square-root-variable" style="color: #E1673C;"></i> MATLAB</span>
-            <span class="skill-chip"><i class="fa-brands fa-react" style="color: #61DAFB;"></i> React.js</span>
-            <span class="skill-chip"><i class="fa-brands fa-js" style="color: #F7DF1E;"></i> JavaScript</span>
-            <span class="skill-chip"><i class="fa-brands fa-html5" style="color: #E34F26;"></i> HTML5</span>
-            <span class="skill-chip"><i class="fa-brands fa-css3-alt" style="color: #1572B6;"></i> CSS3</span>
+      <div class="section-label">Competencies</div>
+      <h2 class="section-title">Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="card reveal">
+          <div class="skill-group-title">// LANGUAGES</div>
+          <div class="chips">
+            <span class="chip"><i class="fa-brands fa-python" style="color:#3776AB"></i> Python</span>
+            <span class="chip"><i class="fa-solid fa-laptop-code" style="color:#00599C"></i> C++</span>
+            <span class="chip"><i class="fa-solid fa-terminal" style="color:#888"></i> C</span>
+            <span class="chip"><i class="fa-solid fa-database" style="color:#00758F"></i> MySQL</span>
+            <span class="chip"><i class="fa-solid fa-database" style="color:#336791"></i> PostgreSQL</span>
+            <span class="chip"><i class="fa-solid fa-square-root-variable" style="color:#E1673C"></i> MATLAB</span>
+            <span class="chip"><i class="fa-brands fa-react" style="color:#61DAFB"></i> React.js</span>
+            <span class="chip"><i class="fa-brands fa-js" style="color:#F7DF1E"></i> JavaScript</span>
           </div>
         </div>
-
-        <!-- Category 2: Libraries & Tools -->
-        <div class="card">
-          <h3 class="skills-category-title"><i class="fa-solid fa-cubes" style="color: var(--blue);"></i> Libraries & Tools</h3>
-          <div class="skills-list">
-            <span class="skill-chip"><i class="fa-solid fa-chart-line" style="color: #FF6F61;"></i> NumPy</span>
-            <span class="skill-chip"><i class="fa-solid fa-table" style="color: #150458;"></i> Pandas</span>
-            <span class="skill-chip"><i class="fa-solid fa-brain" style="color: #F15A24;"></i> Scikit-Learn</span>
-            <span class="skill-chip"><i class="fa-solid fa-calculator" style="color: #008080;"></i> SciPy</span>
-            <span class="skill-chip"><i class="fa-solid fa-chart-pie" style="color: #3F4F75;"></i> Plotly</span>
-            <span class="skill-chip"><i class="fa-solid fa-link" style="color: #D7191C;"></i> SQLAlchemy</span>
-            <span class="skill-chip"><i class="fa-solid fa-network-wired" style="color: #FF6F00;"></i> TensorFlow</span>
-            <span class="skill-chip"><i class="fa-solid fa-leaf" style="color: #47A248;"></i> MongoDB</span>
-            <span class="skill-chip"><i class="fa-brands fa-git-alt" style="color: #F05032;"></i> Git</span>
-            <span class="skill-chip"><i class="fa-solid fa-play" style="color: #FF4B4B;"></i> Streamlit</span>
+        <div class="card reveal">
+          <div class="skill-group-title">// LIBRARIES &amp; TOOLS</div>
+          <div class="chips">
+            <span class="chip"><i class="fa-solid fa-chart-line" style="color:#4caf50"></i> NumPy</span>
+            <span class="chip"><i class="fa-solid fa-table" style="color:#150458"></i> Pandas</span>
+            <span class="chip"><i class="fa-solid fa-brain" style="color:#F15A24"></i> Scikit-Learn</span>
+            <span class="chip"><i class="fa-solid fa-calculator" style="color:#008080"></i> SciPy</span>
+            <span class="chip"><i class="fa-solid fa-chart-pie" style="color:#3F4F75"></i> Plotly</span>
+            <span class="chip"><i class="fa-solid fa-link" style="color:#D7191C"></i> SQLAlchemy</span>
+            <span class="chip"><i class="fa-solid fa-network-wired" style="color:#FF6F00"></i> TensorFlow</span>
+            <span class="chip"><i class="fa-solid fa-leaf" style="color:#47A248"></i> MongoDB</span>
+            <span class="chip"><i class="fa-brands fa-git-alt" style="color:#F05032"></i> Git</span>
+            <span class="chip"><i class="fa-solid fa-play" style="color:#FF4B4B"></i> Streamlit</span>
           </div>
         </div>
-
-        <!-- Category 3: Core Skills -->
-        <div class="card">
-          <h3 class="skills-category-title"><i class="fa-solid fa-layer-group" style="color: var(--green);"></i> Core Skills</h3>
-          <div class="skills-list">
-            <span class="skill-chip"><i class="fa-solid fa-code-fork" style="color: #FFD54F;"></i> DSA</span>
-            <span class="skill-chip"><i class="fa-solid fa-chart-column" style="color: #81C784;"></i> Exploratory Data Analysis</span>
-            <span class="skill-chip"><i class="fa-solid fa-clock" style="color: #4FC3F7;"></i> Time-Series Analysis</span>
-            <span class="skill-chip"><i class="fa-solid fa-gears" style="color: #BA68C8;"></i> Machine Learning</span>
-            <span class="skill-chip"><i class="fa-solid fa-circle-nodes" style="color: #E57373;"></i> Deep Learning</span>
+        <div class="card reveal">
+          <div class="skill-group-title">// CORE SKILLS</div>
+          <div class="chips">
+            <span class="chip"><i class="fa-solid fa-code-fork" style="color:#FFD54F"></i> DSA</span>
+            <span class="chip"><i class="fa-solid fa-chart-column" style="color:#81C784"></i> EDA</span>
+            <span class="chip"><i class="fa-solid fa-clock" style="color:#4FC3F7"></i> Time-Series</span>
+            <span class="chip"><i class="fa-solid fa-gears" style="color:#BA68C8"></i> Machine Learning</span>
+            <span class="chip"><i class="fa-solid fa-circle-nodes" style="color:#E57373"></i> Deep Learning</span>
+            <span class="chip"><i class="fa-solid fa-briefcase" style="color:#FFB300"></i> Portfolio Optimization</span>
+            <span class="chip"><i class="fa-solid fa-shield" style="color:#00acc1"></i> Anomaly Detection</span>
+            <span class="chip"><i class="fa-solid fa-lightbulb" style="color:#f9a825"></i> Explainable AI</span>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ── Achievements & Leadership Section ── -->
-  <section id="timeline">
-    <div class="container grid-2">
-      
-      <!-- Left Column: Leadership -->
-      <div>
-        <h2 class="section-title"><i class="fa-solid fa-people-group" style="color: var(--amber);"></i> Leadership</h2>
-        <div class="card" style="height: calc(100% - 86px);">
-          <div class="timeline-item">
-            <h3 class="timeline-title">President</h3>
-            <div class="timeline-sub">Society for Industrial and Applied Mathematics (SIAM-DTU) · 2024 - Present</div>
-            <p class="timeline-desc">
-              Led the DTU chapter of SIAM. Spearheaded the execution of <strong>'Financial Cricket'</strong> during Invictus (DTU's flagship technical fest), establishing it as the largest student-run financial simulation event across technical fests in India. Managed corporate sponsorships, external partnerships, and nationwide outreach.
-            </p>
+  <div class="hr"></div>
+
+  <!-- ── Profile ── -->
+  <section id="profile">
+    <div class="container">
+      <div class="section-label">Background</div>
+      <h2 class="section-title">Leadership &amp; Achievements</h2>
+      <div class="profile-grid">
+        <div class="reveal">
+          <div class="section-label" style="margin-bottom:24px;">Positions of Responsibility</div>
+          <div class="timeline">
+            <div class="t-item">
+              <div class="t-line"><div class="t-dot"></div><div class="t-pipe"></div></div>
+              <div class="t-content">
+                <div class="t-role">President — SIAM DTU Chapter</div>
+                <div class="t-org">Society for Industrial and Applied Mathematics · 2024 – Present</div>
+                <div class="t-desc">Spearheaded <strong>'Financial Cricket'</strong> at Invictus — DTU's flagship fest — making it the largest student-run financial simulation event across Indian technical fests. Secured corporate sponsorships and managed nationwide outreach.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="section-label" style="margin-bottom:24px;">Awards &amp; Achievements</div>
+          <div class="award-list">
+            <div class="award-item">
+              <div class="award-icon"><i class="fa-solid fa-medal"></i></div>
+              <div>
+                <div class="award-title">98.67 Percentile — JEE Mains 2023</div>
+                <div class="award-desc">AIR 16,731 out of 1.2M candidates. Qualified JEE Advanced 2023.</div>
+              </div>
+            </div>
+            <div class="award-item">
+              <div class="award-icon"><i class="fa-solid fa-trophy"></i></div>
+              <div>
+                <div class="award-title">Semi-Finalist — Smart India Hackathon 2024</div>
+                <div class="award-desc">Among top national teams for data modeling and prototype execution.</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- Right Column: Achievements -->
-      <div>
-        <h2 class="section-title"><i class="fa-solid fa-trophy" style="color: var(--amber);"></i> Achievements</h2>
-        <div class="card" style="height: calc(100% - 86px); display: flex; flex-direction: column; justify-content: center;">
-          
-          <div class="achievement-card">
-            <div class="achievement-icon"><i class="fa-solid fa-medal"></i></div>
-            <div class="achievement-info">
-              <h4>98.67 Percentile (JEE Mains 2023)</h4>
-              <p>Ranked in the top 1.5% nationwide (AIR 16,731 out of 1.2M candidates) and qualified for JEE Advanced 2023.</p>
-            </div>
-          </div>
-
-          <div class="achievement-card">
-            <div class="achievement-icon"><i class="fa-solid fa-circle-check"></i></div>
-            <div class="achievement-info">
-              <h4>Semi-Finalist (Smart India Hackathon 2024)</h4>
-              <p>Stood among the top national teams evaluated for data modeling and prototype execution.</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
     </div>
   </section>
 
   <!-- ── Footer ── -->
   <footer>
-    <div class="container">
-      <div class="footer-links">
-        <a href="https://github.com/SaranshAI13" target="_blank"><i class="fa-brands fa-github"></i></a>
-        <a href="mailto:saranshnijhawan2005@gmail.com"><i class="fa-solid fa-envelope"></i></a>
-        <a href="https://www.linkedin.com/in/saransh-nijhawan" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+    <div class="container footer-inner">
+      <div class="footer-name">
+        Built by <strong>Saransh Nijhawan</strong> · DTU Mathematics &amp; Computing
       </div>
-      <p class="footer-copy">Designed & Engineered by <strong>Saransh Nijhawan</strong></p>
+      <div class="footer-links">
+        <a href="https://github.com/SaranshAI13" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="https://linkedin.com/in/saransh-nijhawan" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://leetcode.com/u/SaranshNijhawan" target="_blank" title="LeetCode"><i class="fa-solid fa-code"></i></a>
+        <a href="mailto:saranshnijhawan2005@gmail.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a href="YOUR_RESUME_LINK_HERE" target="_blank" title="Resume"><i class="fa-solid fa-file-pdf"></i></a>
+      </div>
     </div>
   </footer>
 
-  <script>
-    // Highlight active link in header on scroll
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('.nav-links a');
+</div><!-- /content -->
 
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (pageYOffset >= (sectionTop - 150)) {
-          current = section.getAttribute('id');
-        }
-      });
+<script>
+/* ────────────────────────────────
+   CURSOR
+──────────────────────────────── */
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button,.card,.chip,.btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>ring.classList.remove('hovering'));
+});
 
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').slice(1) === current) {
-          link.classList.add('active');
-        }
-      });
-    });
-  </script>
+/* ────────────────────────────────
+   LOADER
+──────────────────────────────── */
+const bar = document.getElementById('loader-bar');
+const pct = document.getElementById('loader-pct');
+const loader = document.getElementById('loader');
+let progress = 0;
+const tick = setInterval(()=>{
+  progress += Math.random()*18+4;
+  if(progress>=100){ progress=100; clearInterval(tick); }
+  bar.style.width = progress+'%';
+  pct.textContent = Math.floor(progress)+'%';
+  if(progress>=100){
+    setTimeout(()=>{ loader.classList.add('gone'); },400);
+  }
+},120);
+
+/* ────────────────────────────────
+   CANVAS BACKGROUND — Floating Chart Lines
+──────────────────────────────── */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+resize(); window.addEventListener('resize',resize);
+
+class Line{
+  constructor(){this.reset();}
+  reset(){
+    this.x=Math.random()*canvas.width;
+    this.y=Math.random()*canvas.height;
+    this.len=80+Math.random()*200;
+    this.speed=0.3+Math.random()*0.7;
+    this.alpha=0.05+Math.random()*0.12;
+    this.angle=-Math.PI/6+Math.random()*Math.PI/3;
+  }
+  draw(){
+    ctx.save();
+    ctx.globalAlpha=this.alpha;
+    ctx.strokeStyle='#00ff88';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(this.x,this.y);
+    ctx.lineTo(this.x+Math.cos(this.angle)*this.len, this.y+Math.sin(this.angle)*this.len);
+    ctx.stroke();
+    ctx.restore();
+    this.y-=this.speed;
+    if(this.y<-this.len) this.reset();
+  }
+}
+
+class Dot{
+  constructor(){this.reset();}
+  reset(){
+    this.x=Math.random()*canvas.width;
+    this.y=Math.random()*canvas.height;
+    this.r=Math.random()*1.5;
+    this.alpha=0.05+Math.random()*0.15;
+    this.vy=-0.2-Math.random()*0.4;
+  }
+  draw(){
+    ctx.save();
+    ctx.globalAlpha=this.alpha;
+    ctx.fillStyle='#00ff88';
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+    this.y+=this.vy;
+    if(this.y<0)this.reset();
+  }
+}
+
+const lines=Array.from({length:40},()=>new Line());
+const dots=Array.from({length:60},()=>new Dot());
+
+function drawBg(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  lines.forEach(l=>l.draw());
+  dots.forEach(d=>d.draw());
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+/* ────────────────────────────────
+   TICKER
+──────────────────────────────── */
+const tickerData = [
+  {sym:'NIFTY50',val:'24,850.65',chg:'+0.43%',up:true},
+  {sym:'SENSEX',val:'81,920.43',chg:'+0.38%',up:true},
+  {sym:'BTC/USD',val:'67,420.00',chg:'-1.12%',up:false},
+  {sym:'ETH/USD',val:'3,512.80',chg:'+2.05%',up:true},
+  {sym:'GOLD',val:'2,345.50',chg:'+0.21%',up:true},
+  {sym:'USD/INR',val:'83.42',chg:'-0.08%',up:false},
+  {sym:'AAPL',val:'189.30',chg:'+0.65%',up:true},
+  {sym:'SPY',val:'528.74',chg:'+0.22%',up:true},
+  {sym:'VIX',val:'13.45',chg:'-3.20%',up:false},
+];
+const track = document.getElementById('ticker');
+const items = [...tickerData,...tickerData].map(t=>{
+  return `<span class="ticker-item">
+    ${t.sym} &nbsp;<strong style="color:#fff">${t.val}</strong>&nbsp;
+    <span class="${t.up?'up':'down'}">${t.chg}</span>
+  </span>`;
+}).join('');
+track.innerHTML=items;
+
+/* ────────────────────────────────
+   SCROLL REVEAL
+──────────────────────────────── */
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+},{threshold:0.12});
+reveals.forEach(el=>observer.observe(el));
+</script>
 </body>
 </html>
