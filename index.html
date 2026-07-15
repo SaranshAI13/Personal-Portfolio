@@ -1,16 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Saransh Nijhawan â€” Quant & ML Engineer</title>
-  <meta name="description" content="Portfolio of Saransh Nijhawan â€” Mathematics & Computing student at DTU specializing in Quantitative Finance, Machine Learning, and AI Platform Engineering.">
+  <title>Saransh Nijhawan — Quant & ML Engineer</title>
+  <meta name="description" content="Portfolio of Saransh Nijhawan — Mathematics & Computing student at DTU specializing in Quantitative Finance, Machine Learning, and AI Platform Engineering.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* â”€â”€ Custom Cursor â”€â”€ */
+    /* ── Custom Cursor ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { cursor: none !important; scroll-behavior: smooth; }
     body { cursor: none !important; }
@@ -41,7 +41,7 @@
       background: rgba(0,255,136,0.04);
     }
 
-    /* â”€â”€ Variables â”€â”€ */
+    /* ── Variables ── */
     :root {
       --bg: #04070d;
       --surface: rgba(8,14,26,0.85);
@@ -66,7 +66,7 @@
       line-height: 1.6;
     }
 
-    /* â”€â”€ Canvas Background â”€â”€ */
+    /* ── Canvas Background ── */
     #bg-canvas {
       position: fixed;
       top: 0; left: 0;
@@ -75,7 +75,7 @@
       opacity: 0.35;
     }
 
-    /* â”€â”€ Loader â”€â”€ */
+    /* ── Loader ── */
     #loader {
       position: fixed; inset: 0;
       background: var(--bg);
@@ -110,7 +110,7 @@
       box-shadow: 0 0 12px var(--green);
     }
 
-    /* â”€â”€ Layout â”€â”€ */
+    /* ── Layout ── */
     .content { position: relative; z-index: 1; }
 
     .container {
@@ -119,7 +119,7 @@
       padding: 0 32px;
     }
 
-    /* â”€â”€ Header â”€â”€ */
+    /* ── Header ── */
     header {
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 900;
@@ -180,7 +180,7 @@
     .nav-links a:hover { color: var(--green); }
     .nav-links a:hover::after { transform: scaleX(1); }
 
-    /* â”€â”€ Hero â”€â”€ */
+    /* ── Hero ── */
     #hero {
       min-height: 100vh;
       display: flex;
@@ -329,7 +329,7 @@
     }
     .btn-ghost:hover { color: var(--text); }
 
-    /* â”€â”€ Particle Strip â”€â”€ */
+    /* ── Particle Strip ── */
     .particle-strip {
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
@@ -343,7 +343,7 @@
       height: 200px;
     }
 
-    /* â”€â”€ Section base â”€â”€ */
+    /* ── Section base ── */
     section {
       padding: 120px 0;
       position: relative;
@@ -371,7 +371,7 @@
       color: #fff;
     }
 
-    /* â”€â”€ Cards â”€â”€ */
+    /* ── Cards ── */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -397,7 +397,7 @@
     }
     .card:hover::before { transform: scaleX(1); }
 
-    /* â”€â”€ Projects â”€â”€ */
+    /* ── Projects ── */
     .project-grid { display: flex; flex-direction: column; gap: 28px; }
 
     .project-card {
@@ -469,7 +469,7 @@
     .code-block .c-cm { color: rgba(255,255,255,0.2); }
     .code-block .c-num { color: #d19a66; }
 
-    /* â”€â”€ Other repos mini-cards â”€â”€ */
+    /* ── Other repos mini-cards ── */
     .repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 20px; }
     .repo-card {
       padding: 24px;
@@ -488,7 +488,7 @@
     }
     .repo-link:hover { color: var(--green); }
 
-    /* â”€â”€ Skills â”€â”€ */
+    /* ── Skills ── */
     .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 24px; }
     .skill-group-title {
       font-family: var(--mono);
@@ -516,7 +516,7 @@
       transform: translateY(-2px);
     }
 
-    /* â”€â”€ Profile â”€â”€ */
+    /* ── Profile ── */
     .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
     @media(max-width:768px){ .profile-grid { grid-template-columns: 1fr; } }
 
@@ -542,7 +542,7 @@
     .award-title { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
     .award-desc { font-size: 0.9rem; color: var(--text-dim); }
 
-    /* â”€â”€ Footer â”€â”€ */
+    /* ── Footer ── */
     footer {
       border-top: 1px solid var(--border);
       padding: 60px 0;
@@ -568,10 +568,10 @@
     }
     .footer-links a:hover { color: var(--green); transform: translateY(-3px); }
 
-    /* â”€â”€ Divider â”€â”€ */
+    /* ── Divider ── */
     .hr { height: 1px; background: var(--border); margin: 0; }
 
-    /* â”€â”€ Reveal animation â”€â”€ */
+    /* ── Reveal animation ── */
     .reveal {
       opacity: 0;
       transform: translateY(30px);
@@ -582,7 +582,7 @@
       transform: translateY(0);
     }
 
-    /* â”€â”€ Scanlines overlay â”€â”€ */
+    /* ── Scanlines overlay ── */
     body::after {
       content: '';
       position: fixed; inset: 0;
@@ -600,22 +600,22 @@
 </head>
 <body>
 
-<!-- â”€â”€ Custom Cursor â”€â”€ -->
+<!-- ── Custom Cursor ── -->
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
 
-<!-- â”€â”€ Loader â”€â”€ -->
+<!-- ── Loader ── -->
 <div id="loader">
   <div class="loader-text">INITIALIZING SYSTEM...</div>
   <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
   <div class="loader-text" id="loader-pct">0%</div>
 </div>
 
-<!-- â”€â”€ Background Canvas â”€â”€ -->
+<!-- ── Background Canvas ── -->
 <canvas id="bg-canvas"></canvas>
 
 <div class="content">
-  <!-- â”€â”€ Header â”€â”€ -->
+  <!-- ── Header ── -->
   <header>
     <div class="container nav-inner">
       <a href="#" class="nav-logo">
@@ -625,24 +625,24 @@
         <li><a href="#projects">Projects</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#profile">Profile</a></li>
-        <li><a href="YOUR_RESUME_LINK_HERE" target="_blank">Resume â†-</a></li>
+        <li><a href="YOUR_RESUME_LINK_HERE" target="_blank">Resume ↗</a></li>
       </ul>
     </div>
   </header>
 
-  <!-- â”€â”€ Hero â”€â”€ -->
+  <!-- ── Hero ── -->
   <section id="hero">
     <div class="container">
       <div class="hero-status">
         <span class="status-blink"></span>
-        Final Year Â· DTU Mathematics &amp; Computing Â· Available for Opportunities
+        Final Year · DTU Mathematics &amp; Computing · Available for Opportunities
       </div>
       <h1 class="hero-name">
         <span class="line1 glitch" data-text="SARANSH">SARANSH</span>
         <span class="line2">NIJHAWAN</span>
       </h1>
       <div class="hero-role">
-        <span>4th Year Â· DTU Mathematics &amp; Computing</span>
+        <span>4th Year · DTU Mathematics &amp; Computing</span>
       </div>
       <p class="hero-desc">
         I'm a final year Maths &amp; Computing student at DTU who spends most of my time thinking
@@ -650,7 +650,7 @@
         I've shipped real quant risk platforms, built AutoML tools people actually use,
         and run India's largest student-run financial simulation event.
         Currently looking for roles at the intersection of
-        <strong>data, ML, and systems</strong> â€” Quant, SDE, MLE, or Data Engineering.
+        <strong>data, ML, and systems</strong> - Quant, SDE, MLE, or Data Engineering.
       </p>
       <div class="hero-ctas">
         <a href="#projects" class="btn btn-primary"><i class="fa-solid fa-arrow-down"></i> View Work</a>
@@ -661,12 +661,12 @@
     </div>
   </section>
 
-  <!-- â”€â”€ Particle Strip â”€â”€ -->
+  <!-- ── Particle Strip ── -->
   <div class="particle-strip">
     <canvas id="p-canvas"></canvas>
   </div>
 
-  <!-- â”€â”€ Projects â”€â”€ -->
+  <!-- ── Projects ── -->
   <section id="projects">
     <div class="container">
       <h2 class="section-title">Core Projects</h2>
@@ -677,8 +677,8 @@
         <div class="card project-card reveal">
           <div class="project-left">
             <div class="project-num">01 / LIVE</div>
-            <h3 class="project-name">Multi-Asset Risk Intelligence [MARIâ„¢]</h3>
-            <div class="project-stack">Python Â· FastAPI Â· React.js Â· Scikit-Learn Â· SciPy Â· SHAP</div>
+            <h3 class="project-name">Multi-Asset Risk Intelligence [MARI™]</h3>
+            <div class="project-stack">Python · FastAPI · React.js · Scikit-Learn · SciPy · SHAP</div>
             <ul class="project-desc">
               <li>Forecasts 5-day volatility comparing <strong>GARCH(1,1)</strong> vs Gradient Boosting Regressor across 32 global assets.</li>
               <li>Solves <strong>Max Sharpe &amp; Risk Parity</strong> portfolio allocation using Ledoit-Wolf Covariance Shrinkage.</li>
@@ -715,7 +715,7 @@ weights = <span class="c-fn">optimize_portfolio</span>(
           <div class="project-left">
             <div class="project-num">02 / LIVE</div>
             <h3 class="project-name">AutoEDA.AI</h3>
-            <div class="project-stack">Python Â· Streamlit Â· Scikit-Learn Â· Plotly Â· Pandas</div>
+            <div class="project-stack">Python · Streamlit · Scikit-Learn · Plotly · Pandas</div>
             <ul class="project-desc">
               <li>Auto-calculates a <strong>Data Health Score</strong> with Pearson correlation matrix and OLS trendlines.</li>
               <li>Anomaly detection via <strong>Isolation Forest</strong> with adjustable contamination threshold.</li>
@@ -749,7 +749,7 @@ importance = model.feature_importances_</div>
           <div class="project-left">
             <div class="project-num">03 / LIVE</div>
             <h3 class="project-name">Salary Manager Pro</h3>
-            <div class="project-stack">Python Â· Flask Â· SQLite Â· SQLAlchemy Â· JavaScript</div>
+            <div class="project-stack">Python · Flask · SQLite · SQLAlchemy · JavaScript</div>
             <ul class="project-desc">
               <li>Multi-tenant <strong>workspace isolation</strong> with SQLite and cascading deletion rules via SQLAlchemy ORM.</li>
               <li><strong>Double-entry bookkeeping</strong> ledger mapping CR/DR to track real-time employee dues.</li>
@@ -783,19 +783,19 @@ importance = model.feature_importances_</div>
         <div class="repo-grid">
           <div class="card repo-card reveal">
             <div class="repo-name">Zomato Delivery Time Prediction</div>
-            <div class="repo-stack">Python Â· XGBoost Â· Flask Â· Pandas</div>
+            <div class="repo-stack">Python · XGBoost · Flask · Pandas</div>
             <p class="repo-desc">ML model predicting delivery times using distance, vehicle type, and partner age. Flask-deployed for real-time inference.</p>
             <a class="repo-link" href="https://github.com/SaranshAI13/Zomato-Time-Delivery-Prediction" target="_blank"><i class="fa-brands fa-github"></i> VIEW REPO</a>
           </div>
           <div class="card repo-card reveal">
-            <div class="repo-name">Stock Price Prediction â€” LSTM</div>
-            <div class="repo-stack">Python Â· TensorFlow Â· Keras Â· NumPy</div>
+            <div class="repo-name">Stock Price Prediction - LSTM</div>
+            <div class="repo-stack">Python · TensorFlow · Keras · NumPy</div>
             <p class="repo-desc">Sequence-to-one LSTM model trained on 5 years of OHLCV data to predict next-day closing prices, with MinMax scaling and walk-forward validation.</p>
             <a class="repo-link" href="https://github.com/SaranshAI13" target="_blank"><i class="fa-brands fa-github"></i> VIEW REPO</a>
           </div>
           <div class="card repo-card reveal">
             <div class="repo-name">Amazon Sales EDA</div>
-            <div class="repo-stack">Python Â· Pandas Â· Matplotlib Â· Jupyter</div>
+            <div class="repo-stack">Python · Pandas · Matplotlib · Jupyter</div>
             <p class="repo-desc">Data profiling, discount analysis, and correlation visualizations on Amazon order datasets.</p>
             <a class="repo-link" href="https://github.com/SaranshAI13/EDA-Amazon-Sales-Data" target="_blank"><i class="fa-brands fa-github"></i> VIEW REPO</a>
           </div>
@@ -806,7 +806,7 @@ importance = model.feature_importances_</div>
 
   <div class="hr"></div>
 
-  <!-- â”€â”€ Skills â”€â”€ -->
+  <!-- ── Skills ── -->
   <section id="skills">
     <div class="container">
       <div class="section-label">Competencies</div>
@@ -863,7 +863,7 @@ importance = model.feature_importances_</div>
 
   <div class="hr"></div>
 
-  <!-- â”€â”€ Profile â”€â”€ -->
+  <!-- ── Profile ── -->
   <section id="profile">
     <div class="container">
       <div class="section-label">Background</div>
@@ -875,12 +875,12 @@ importance = model.feature_importances_</div>
             <div class="t-item">
               <div class="t-line"><div class="t-dot"></div><div class="t-pipe"></div></div>
               <div class="t-content">
-                <div class="t-role">President â€” SIAM DTU Chapter</div>
-                <div class="t-org">Society for Industrial and Applied Mathematics Â· 2024 â€“ Present</div>
+                <div class="t-role">President - SIAM DTU Chapter</div>
+                <div class="t-org">Society for Industrial and Applied Mathematics · 2024 – Present</div>
                 <div class="t-desc">
-                  SIAM (Society for Industrial and Applied Mathematics) is one of the world's leading international mathematics societies â€” and I serve as the <strong>President of its DTU Chapter</strong>. Beyond the title, the chapter actively supports DTU's Masters and PhD students in getting their mathematics research published in SIAM's peer-reviewed international journals.
+                  SIAM (Society for Industrial and Applied Mathematics) is one of the world's leading international mathematics societies - and I serve as the <strong>President of its DTU Chapter</strong>. Beyond the title, the chapter actively supports DTU's Masters and PhD students in getting their mathematics research published in SIAM's peer-reviewed international journals.
                   <br><br>
-                  I built the chapter's events calendar from scratch â€” the flagship being <strong>'Financial Cricket'</strong> at Invictus, DTU's annual technical fest, which became the <strong>largest student-run financial simulation event across Indian technical fests</strong>, drawing participants nationwide with corporate sponsorships. Other events under my leadership include <strong>Mock Stocks</strong> (live portfolio trading simulations), <strong>SIAM Jenga</strong> (a probability and strategy variant), and a <strong>Squid Game finance simulation</strong> â€” blending game theory with real financial decision-making.
+                  I built the chapter's events calendar from scratch - the flagship being <strong>'Financial Cricket'</strong> at Invictus, DTU's annual technical fest, which became the <strong>largest student-run financial simulation event across Indian technical fests</strong>, drawing participants nationwide with corporate sponsorships. Other events under my leadership include <strong>Mock Stocks</strong> (live portfolio trading simulations), <strong>SIAM Jenga</strong> (a probability and strategy variant), and a <strong>Squid Game finance simulation</strong> - blending game theory with real financial decision-making.
                 </div>
               </div>
             </div>
@@ -892,14 +892,14 @@ importance = model.feature_importances_</div>
             <div class="award-item">
               <div class="award-icon"><i class="fa-solid fa-medal"></i></div>
               <div>
-                <div class="award-title">98.67 Percentile â€” JEE Mains 2023</div>
+                <div class="award-title">98.67 Percentile - JEE Mains 2023</div>
                 <div class="award-desc">AIR 16,731 out of 1.2M candidates. Qualified JEE Advanced 2023.</div>
               </div>
             </div>
             <div class="award-item">
               <div class="award-icon"><i class="fa-solid fa-trophy"></i></div>
               <div>
-                <div class="award-title">Semi-Finalist â€” Smart India Hackathon 2024</div>
+                <div class="award-title">Semi-Finalist - Smart India Hackathon 2024</div>
                 <div class="award-desc">Among top national teams for data modeling and prototype execution.</div>
               </div>
             </div>
@@ -909,7 +909,7 @@ importance = model.feature_importances_</div>
     </div>
   </section>
 
-  <!-- â”€â”€ Footer â”€â”€ -->
+  <!-- ── Footer ── -->
   <footer>
     <div class="container footer-inner">
         <div class="footer-name">
@@ -928,9 +928,9 @@ importance = model.feature_importances_</div>
 </div><!-- /content -->
 
 <script>
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ────────────────────────────────
    CURSOR
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+──────────────────────────────── */
 const dot = document.getElementById('cursor-dot');
 const ring = document.getElementById('cursor-ring');
 let mx=0,my=0,rx=0,ry=0;
@@ -948,9 +948,9 @@ document.querySelectorAll('a,button,.card,.chip,.btn').forEach(el=>{
   el.addEventListener('mouseleave',()=>ring.classList.remove('hovering'));
 });
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ────────────────────────────────
    LOADER
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+──────────────────────────────── */
 const bar = document.getElementById('loader-bar');
 const pct = document.getElementById('loader-pct');
 const loader = document.getElementById('loader');
@@ -965,9 +965,9 @@ const tick = setInterval(()=>{
   }
 },120);
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   CANVAS BACKGROUND â€” Floating Chart Lines
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ────────────────────────────────
+   CANVAS BACKGROUND — Floating Chart Lines
+──────────────────────────────── */
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
@@ -1031,9 +1031,9 @@ function drawBg(){
 }
 drawBg();
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ────────────────────────────────
    PARTICLE CONSTELLATION
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+──────────────────────────────── */
 (function(){
   const cv = document.getElementById('p-canvas');
   const cx = cv.getContext('2d');
@@ -1146,9 +1146,9 @@ drawBg();
   tick();
 })();
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ────────────────────────────────
    SCROLL REVEAL
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+──────────────────────────────── */
 const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
@@ -1159,4 +1159,3 @@ reveals.forEach(el=>observer.observe(el));
 </script>
 </body>
 </html>
-
