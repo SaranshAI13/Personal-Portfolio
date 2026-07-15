@@ -349,6 +349,51 @@
       width: 100%;
     }
 
+    /* ── Subprojects Grid ── */
+    .sub-projects-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 40px 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sub-projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .sub-project-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+      min-height: 250px;
+    }
+
+    .sub-project-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .sub-project-stack {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--amber);
+      margin-bottom: 12px;
+    }
+
+    .sub-project-desc {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      margin-bottom: 20px;
+    }
+
     /* ── Skills Section ── */
     .skills-wrapper {
       display: grid;
@@ -386,11 +431,20 @@
       gap: 8px;
     }
 
+    .skill-chip i {
+      font-size: 1.05rem;
+      transition: transform 0.2s ease;
+    }
+
     .skill-chip:hover {
       background: rgba(255, 165, 0, 0.03);
       border-color: var(--border-hover);
       color: var(--text-primary);
       transform: translateY(-2px);
+    }
+
+    .skill-chip:hover i {
+      transform: scale(1.15);
     }
 
     /* ── Achievements & Leadership Grid ── */
@@ -659,6 +713,50 @@ class LedgerEntry(db.Model):
         </div>
 
       </div>
+
+      <!-- ── Section 2: Other Projects ── -->
+      <h3 class="sub-projects-title"><i class="fa-solid fa-folder-open" style="color: var(--amber);"></i> Other Repositories</h3>
+      
+      <div class="sub-projects-grid">
+        
+        <!-- Sub Project 1: Zomato Prediction -->
+        <div class="card sub-project-card">
+          <div>
+            <h4 class="sub-project-title">Zomato Delivery Time Prediction</h4>
+            <span class="sub-project-stack">Python · XGBoost · Flask · Pandas</span>
+            <p class="sub-project-desc">A Machine Learning model that predicts food delivery times using partner age, distance, and vehicle type. Deployed with a Flask backend for real-time web inference.</p>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/SaranshAI13/Zomato-Time-Delivery-Prediction" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
+          </div>
+        </div>
+
+        <!-- Sub Project 2: IIT Gandhinagar Internship -->
+        <div class="card sub-project-card">
+          <div>
+            <h4 class="sub-project-title">IIT Gandhinagar Summer Internship (SRIP)</h4>
+            <span class="sub-project-stack">Python · Machine Learning · Jupyter</span>
+            <p class="sub-project-desc">Research-oriented data analysis and predictive modeling codebase completed during the Summer Research Internship Program at IIT Gandhinagar.</p>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/SaranshAI13/Project-SRIP-Project-Number-IP0NB0000019-IIT-GDH-SUMMER-INTERN" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
+          </div>
+        </div>
+
+        <!-- Sub Project 3: EDA Amazon Sales -->
+        <div class="card sub-project-card">
+          <div>
+            <h4 class="sub-project-title">Amazon Sales Data EDA</h4>
+            <span class="sub-project-stack">Python · Jupyter · Matplotlib · Pandas</span>
+            <p class="sub-project-desc">Data profiling, discount analysis, ratings correlations, and data visualization on historical Amazon order datasets.</p>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/SaranshAI13/EDA-Amazon-Sales-Data" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </section>
 
@@ -669,40 +767,49 @@ class LedgerEntry(db.Model):
       
       <div class="skills-wrapper">
         
+        <!-- Category 1: Languages -->
         <div class="card">
           <h3 class="skills-category-title"><i class="fa-solid fa-code" style="color: var(--amber);"></i> Languages</h3>
           <div class="skills-list">
-            <span class="skill-chip">Python</span>
-            <span class="skill-chip">C++</span>
-            <span class="skill-chip">C</span>
-            <span class="skill-chip">SQL</span>
-            <span class="skill-chip">MATLAB</span>
+            <span class="skill-chip"><i class="fa-brands fa-python" style="color: #3776AB;"></i> Python</span>
+            <span class="skill-chip"><i class="fa-solid fa-laptop-code" style="color: #00599C;"></i> C++</span>
+            <span class="skill-chip"><i class="fa-solid fa-terminal" style="color: #555555;"></i> C</span>
+            <span class="skill-chip"><i class="fa-solid fa-database" style="color: #00758F;"></i> MySQL</span>
+            <span class="skill-chip"><i class="fa-solid fa-database" style="color: #336791;"></i> PostgreSQL</span>
+            <span class="skill-chip"><i class="fa-solid fa-square-root-variable" style="color: #E1673C;"></i> MATLAB</span>
+            <span class="skill-chip"><i class="fa-brands fa-react" style="color: #61DAFB;"></i> React.js</span>
+            <span class="skill-chip"><i class="fa-brands fa-js" style="color: #F7DF1E;"></i> JavaScript</span>
+            <span class="skill-chip"><i class="fa-brands fa-html5" style="color: #E34F26;"></i> HTML5</span>
+            <span class="skill-chip"><i class="fa-brands fa-css3-alt" style="color: #1572B6;"></i> CSS3</span>
           </div>
         </div>
 
+        <!-- Category 2: Libraries & Tools -->
         <div class="card">
-          <h3 class="skills-category-title"><i class="fa-solid fa-cubes" style="color: var(--blue);"></i> ML & Libraries</h3>
+          <h3 class="skills-category-title"><i class="fa-solid fa-cubes" style="color: var(--blue);"></i> Libraries & Tools</h3>
           <div class="skills-list">
-            <span class="skill-chip">Scikit-Learn</span>
-            <span class="skill-chip">SciPy</span>
-            <span class="skill-chip">Statsmodels</span>
-            <span class="skill-chip">Arch (GARCH)</span>
-            <span class="skill-chip">SHAP</span>
-            <span class="skill-chip">Pandas</span>
-            <span class="skill-chip">NumPy</span>
-            <span class="skill-chip">Plotly</span>
+            <span class="skill-chip"><i class="fa-solid fa-chart-line" style="color: #FF6F61;"></i> NumPy</span>
+            <span class="skill-chip"><i class="fa-solid fa-table" style="color: #150458;"></i> Pandas</span>
+            <span class="skill-chip"><i class="fa-solid fa-brain" style="color: #F15A24;"></i> Scikit-Learn</span>
+            <span class="skill-chip"><i class="fa-solid fa-calculator" style="color: #008080;"></i> SciPy</span>
+            <span class="skill-chip"><i class="fa-solid fa-chart-pie" style="color: #3F4F75;"></i> Plotly</span>
+            <span class="skill-chip"><i class="fa-solid fa-link" style="color: #D7191C;"></i> SQLAlchemy</span>
+            <span class="skill-chip"><i class="fa-solid fa-network-wired" style="color: #FF6F00;"></i> TensorFlow</span>
+            <span class="skill-chip"><i class="fa-solid fa-leaf" style="color: #47A248;"></i> MongoDB</span>
+            <span class="skill-chip"><i class="fa-brands fa-git-alt" style="color: #F05032;"></i> Git</span>
+            <span class="skill-chip"><i class="fa-solid fa-play" style="color: #FF4B4B;"></i> Streamlit</span>
           </div>
         </div>
 
+        <!-- Category 3: Core Skills -->
         <div class="card">
-          <h3 class="skills-category-title"><i class="fa-solid fa-layer-group" style="color: var(--green);"></i> Core Competencies</h3>
+          <h3 class="skills-category-title"><i class="fa-solid fa-layer-group" style="color: var(--green);"></i> Core Skills</h3>
           <div class="skills-list">
-            <span class="skill-chip">Time-Series Analysis</span>
-            <span class="skill-chip">Portfolio Optimization</span>
-            <span class="skill-chip">Anomaly Detection</span>
-            <span class="skill-chip">Explainable AI (XAI)</span>
-            <span class="skill-chip">Data Structures & Algos</span>
-            <span class="skill-chip">Exploratory Data Analysis</span>
+            <span class="skill-chip"><i class="fa-solid fa-code-fork" style="color: #FFD54F;"></i> DSA</span>
+            <span class="skill-chip"><i class="fa-solid fa-chart-column" style="color: #81C784;"></i> Exploratory Data Analysis</span>
+            <span class="skill-chip"><i class="fa-solid fa-clock" style="color: #4FC3F7;"></i> Time-Series Analysis</span>
+            <span class="skill-chip"><i class="fa-solid fa-gears" style="color: #BA68C8;"></i> Machine Learning</span>
+            <span class="skill-chip"><i class="fa-solid fa-circle-nodes" style="color: #E57373;"></i> Deep Learning</span>
           </div>
         </div>
 
