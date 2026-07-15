@@ -329,59 +329,64 @@
     }
     .btn-ghost:hover { color: var(--text); }
 
-    /* ── Stats Strip ── */
-    .stats-strip {
+    /* ── Editorial Marquee ── */
+    .marquee-section {
+      padding: 0;
+      overflow: hidden;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      padding: 0;
-      background: rgba(0,255,136,0.015);
+      background: rgba(0,0,0,0.2);
     }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      divide: var(--border);
-    }
-    @media(max-width:768px){
-      .stats-grid { grid-template-columns: repeat(2,1fr); }
-    }
-    .stat-item {
-      padding: 32px 20px;
-      text-align: center;
-      border-right: 1px solid var(--border);
-      transition: background 0.3s;
-      position: relative;
+    .marquee-row {
+      display: flex;
+      gap: 0;
+      padding: 18px 0;
+      white-space: nowrap;
       overflow: hidden;
+      border-bottom: 1px solid var(--border);
     }
-    .stat-item:last-child { border-right: none; }
-    .stat-item::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--green);
-      transform: scaleX(0);
-      transition: transform 0.4s;
+    .marquee-row:last-child { border-bottom: none; }
+    .marquee-track {
+      display: flex;
+      gap: 0;
+      flex-shrink: 0;
+      will-change: transform;
     }
-    .stat-item:hover { background: rgba(0,255,136,0.04); }
-    .stat-item:hover::after { transform: scaleX(1); }
-    .stat-num {
-      display: block;
-      font-family: var(--mono);
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
-      font-weight: 700;
-      color: var(--green);
+    .marquee-row.rev .marquee-track { animation: mq-rev 35s linear infinite; }
+    .marquee-row:not(.rev) .marquee-track { animation: mq-fwd 28s linear infinite; }
+    @keyframes mq-fwd { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes mq-rev { from{transform:translateX(-50%)} to{transform:translateX(0)} }
+    .marquee-word {
+      font-family: var(--sans);
+      font-size: clamp(1.6rem, 3vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      padding: 0 40px;
       line-height: 1;
-      margin-bottom: 8px;
-      text-shadow: 0 0 20px rgba(0,255,136,0.4);
-      transition: text-shadow 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 40px;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.12);
+      transition: -webkit-text-stroke 0.3s, color 0.3s;
     }
-    .stat-item:hover .stat-num { text-shadow: 0 0 30px rgba(0,255,136,0.7); }
-    .stat-label {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--text-dim);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
+    .marquee-word.filled {
+      color: rgba(255,255,255,0.07);
+      -webkit-text-stroke: none;
+    }
+    .marquee-word.accent {
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0,255,136,0.3);
+    }
+    .marquee-word:hover {
+      color: var(--green) !important;
+      -webkit-text-stroke: none !important;
+    }
+    .marquee-sep {
+      font-size: 1rem;
+      color: var(--border);
+      padding: 0 10px;
+      align-self: center;
     }
 
     /* ── Section base ── */
@@ -697,27 +702,19 @@
     </div>
   </section>
 
-  <!-- ── Stats Strip ── -->
-  <div class="stats-strip">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item" data-target="32" data-suffix=" Assets">
-          <span class="stat-num">0</span><span class="stat-label">Assets in MARI™</span>
-        </div>
-        <div class="stat-item" data-target="600" data-suffix="+">
-          <span class="stat-num">0</span><span class="stat-label">DSA Problems Solved</span>
-        </div>
-        <div class="stat-item" data-target="3" data-suffix=" Live">
-          <span class="stat-num">0</span><span class="stat-label">Deployed Projects</span>
-        </div>
-        <div class="stat-item" data-target="98.67" data-suffix="%" data-float="true">
-          <span class="stat-num">0</span><span class="stat-label">JEE Percentile</span>
-        </div>
-        <div class="stat-item" data-target="16731" data-suffix="" data-prefix="AIR ">
-          <span class="stat-num">0</span><span class="stat-label">JEE Mains Rank</span>
-        </div>
-      </div>
+  <!-- ── Editorial Marquee ── -->
+  <div class="marquee-section">
+
+    <div class="marquee-row">
+      <div class="marquee-track" id="mq1"></div>
+      <div class="marquee-track" id="mq1b"></div>
     </div>
+
+    <div class="marquee-row rev">
+      <div class="marquee-track" id="mq2"></div>
+      <div class="marquee-track" id="mq2b"></div>
+    </div>
+
   </div>
 
   <!-- ── Projects ── -->
@@ -1079,33 +1076,35 @@ function drawBg(){
 drawBg();
 
 /* ────────────────────────────────
-   ANIMATED STATS COUNTER
+   EDITORIAL MARQUEE
 ──────────────────────────────── */
-const statItems = document.querySelectorAll('.stat-item');
-const countObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    const el = entry.target;
-    const numEl = el.querySelector('.stat-num');
-    const target = parseFloat(el.dataset.target);
-    const suffix = el.dataset.suffix || '';
-    const prefix = el.dataset.prefix || '';
-    const isFloat = el.dataset.float === 'true';
-    const duration = 1800;
-    const start = performance.now();
-    function update(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const val = target * eased;
-      numEl.textContent = prefix + (isFloat ? val.toFixed(2) : Math.floor(val).toLocaleString()) + suffix;
-      if (progress < 1) requestAnimationFrame(update);
-    }
-    requestAnimationFrame(update);
-    countObserver.unobserve(el);
-  });
-}, { threshold: 0.3 });
-statItems.forEach(el => countObserver.observe(el));
+const row1 = [
+  {t:'Gradient Boosting',s:'filled'},
+  {t:'Time Series',s:'accent'},
+  {t:'Portfolio Optimization',s:''},
+  {t:'Covariance Shrinkage',s:'filled'},
+  {t:'GARCH',s:'accent'},
+  {t:'FastAPI',s:''},
+  {t:'Isolation Forest',s:'filled'},
+  {t:'Backpropagation',s:'accent'},
+];
+const row2 = [
+  {t:'Scikit-Learn',s:'accent'},
+  {t:'Monte Carlo',s:''},
+  {t:'Explainable AI',s:'filled'},
+  {t:'Risk Parity',s:'accent'},
+  {t:'Random Forest',s:''},
+  {t:'Ledoit-Wolf',s:'filled'},
+  {t:'Streamlit',s:'accent'},
+  {t:'Stochastic Calculus',s:''},
+];
+function buildTrack(words){
+  return words.map(w=>
+    `<span class="marquee-word ${w.s}">${w.t}<span class="marquee-sep">/</span></span>`
+  ).join('');
+}
+['mq1','mq1b'].forEach(id=>{ document.getElementById(id).innerHTML=buildTrack(row1); });
+['mq2','mq2b'].forEach(id=>{ document.getElementById(id).innerHTML=buildTrack(row2); });
 
 /* ────────────────────────────────
    SCROLL REVEAL
