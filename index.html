@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saransh Nijhawan — Portfolio</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: rgba(17, 19, 31, 0.65);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(255, 165, 0, 0.25);
+      --text-primary: #e8eaed;
+      --text-secondary: #9aa0a6;
+      --amber: #ffa500;
+      --amber-glow: rgba(255, 165, 0, 0.15);
+      --blue: #38bdf8;
+      --green: #00e676;
+      --font-outfit: 'Outfit', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 165, 0, 0.03) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.03) 0%, transparent 40%);
+      color: var(--text-primary);
+      font-family: var(--font-outfit);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Layout Grid ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Header & Navigation ── */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(9, 10, 15, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--amber);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 400;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--text-primary);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    /* ── Hero Section ── */
+    #hero {
+      padding: 160px 0 100px;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+    .hero-tag {
+      font-family: var(--font-mono);
+      color: var(--amber);
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      display: inline-block;
+      border: 1px solid rgba(255, 165, 0, 0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(255, 165, 0, 0.04);
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 50%, #9aa0a6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: clamp(1.1rem, 2vw, 1.3rem);
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin-bottom: 40px;
+      line-height: 1.5;
+    }
+
+    .hero-desc strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--amber);
+      color: #000000;
+    }
+
+    .btn-primary:hover {
+      background: #e69500;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 165, 0, 0.25);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* ── Sections Common ── */
+    section {
+      padding: 100px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.75px;
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Glassmorphic Cards ── */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 165, 0, 0.02);
+    }
+
+    /* ── Projects Grid ── */
+    .projects-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .project-card {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .project-card {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    .project-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .project-header {
+      margin-bottom: 20px;
+    }
+
+    .project-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .project-stack {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--amber);
+      font-weight: 500;
+    }
+
+    .project-desc {
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .project-desc ul {
+      list-style-position: inside;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .project-desc li {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .project-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .project-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .project-visual {
+      background: rgba(255, 255, 255, 0.01);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      position: relative;
+    }
+
+    .visual-glow {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--amber);
+      filter: blur(80px);
+      opacity: 0.15;
+    }
+
+    .visual-code {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.4);
+      padding: 24px;
+      white-space: pre-wrap;
+      width: 100%;
+    }
+
+    /* ── Skills Section ── */
+    .skills-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+    }
+
+    .skills-category-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skill-chip {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill-chip:hover {
+      background: rgba(255, 165, 0, 0.03);
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    /* ── Achievements & Leadership Grid ── */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 24px;
+      border-left: 2px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--amber);
+      border: 2px solid var(--bg);
+    }
+
+    .timeline-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .timeline-sub {
+      font-size: 0.9rem;
+      color: var(--amber);
+      font-weight: 500;
+      margin-bottom: 12px;
+      font-family: var(--font-mono);
+    }
+
+    .timeline-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .achievement-card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .achievement-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .achievement-icon {
+      font-size: 1.5rem;
+      color: var(--amber);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .achievement-info h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .achievement-info p {
+      font-size: 0.93rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 60px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--amber);
+      transform: translateY(-2px);
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .footer-copy strong {
+      color: var(--amber);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header>
+    <div class="container nav-container">
+      <a href="#" class="logo">SARANSH_NIJHAWAN</a>
+      <ul class="nav-links">
+        <li><a href="#hero" class="active">Home</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#timeline">Profile</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ── Hero Section ── -->
+  <section id="hero">
+    <div class="container hero-content">
+      <span class="hero-tag">Mathematics & Computing</span>
+      <h1 class="hero-title">Engineering Quantitative Models & AI Platform Pipelines.</h1>
+      <p class="hero-desc">
+        I am a final year <strong>Mathematics & Computing</strong> student at <strong>Delhi Technological University (DTU)</strong>. I specialize in building robust statistical engines, applying machine learning models to market forecasts, and structuring quantitative financial risk optimizers.
+      </p>
+      <div class="btn-group">
+        <a href="#projects" class="btn btn-primary"><i class="fa-solid fa-code"></i> View Projects</a>
+        <a href="https://github.com/SaranshAI13" target="_blank" class="btn btn-secondary"><i class="fa-brands fa-github"></i> GitHub Profile</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Projects Section ── -->
+  <section id="projects">
+    <div class="container">
+      <h2 class="section-title"><i class="fa-solid fa-laptop-code" style="color: var(--amber);"></i> Core Projects</h2>
+      
+      <div class="projects-grid">
+        
+        <!-- Project 1: MARI -->
+        <div class="card project-card">
+          <div class="project-info">
+            <div class="project-header">
+              <h3 class="project-title">Multi-Asset Risk Intelligence [MARI™]</h3>
+              <span class="project-stack">Python · FastAPI · React.js · Scikit-Learn · SciPy</span>
+            </div>
+            <div class="project-desc">
+              <p>An enterprise-grade quantitative risk dashboard and model execution engine. It processes historical datasets to solve optimal portfolio allocations and forecast short-horizon volatility using hybrid statistical-ML pipelines.</p>
+              <ul>
+                <li>Forecasts 5-day forward realized volatility comparing classical econometric <strong>GARCH(1,1)</strong> models with a <strong>Gradient Boosting Regressor</strong> using 14 engineered technical indicators.</li>
+                <li>Solves optimal portfolio allocations under <strong>Max Sharpe</strong> and <strong>Risk Parity</strong> constraints, integrating **Ledoit-Wolf Covariance Shrinkage** to denoise covariance estimation.</li>
+                <li>Implements real-time **SHAP local explainability** plots and K-Means clustering to classify market risk regimes.</li>
+              </ul>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/SaranshAI13/Multi-Asset-Risk-Intelligence-Platform-MARI-" target="_blank"><i class="fa-brands fa-github"></i> Source Code</a>
+              <a href="https://multi-asset-risk-intelligence-platf.vercel.app" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>
+            </div>
+          </div>
+          <div class="project-visual">
+            <div class="visual-glow"></div>
+            <div class="visual-code">
+# GARCH(1,1) Volatility Modeling
+model = arch_model(returns, vol='Garch', p=1, q=1)
+res = model.fit(update_freq=0)
+forecast = np.sqrt(res.forecast().variance.values[-1, 0] * 252)
+
+# Ledoit-Wolf Shrinkage
+shrunk_cov, delta = ledoit_wolf(returns.values)
+cov = shrunk_cov * 252
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: AutoEDA.AI -->
+        <div class="card project-card">
+          <div class="project-info">
+            <div class="project-header">
+              <h3 class="project-title">AutoEDA.AI</h3>
+              <span class="project-stack">Python · Streamlit · Scikit-Learn · Plotly · Pandas</span>
+            </div>
+            <div class="project-desc">
+              <p>A fully automated exploratory data analysis and machine learning training pipeline designed to deliver instant dataset diagnostics, outlier detection, and predictive modeling.</p>
+              <ul>
+                <li>Calculates a dynamic <strong>Data Health Score</strong> and renders interactive distribution plots, Pearson correlation matrices, and OLS regression trendlines.</li>
+                <li>Implements unsupervised anomaly flagging using an <strong>Isolation Forest</strong> algorithm with user-adjustable contamination rate thresholds.</li>
+                <li>Auto-detects ML tasks (regression vs. classification), performs data imputation/encoding, and trains baseline models vs. <strong>Random Forest Classifiers/Regressors</strong> for real-time form prediction.</li>
+              </ul>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/SaranshAI13/SmartEDA_AutoML" target="_blank"><i class="fa-brands fa-github"></i> Source Code</a>
+              <a href="https://autoeda-ai.streamlit.app" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>
+            </div>
+          </div>
+          <div class="project-visual">
+            <div class="visual-glow" style="background: var(--blue);"></div>
+            <div class="visual-code">
+# Outlier Detection via Isolation Forest
+iso = IsolationForest(contamination=contamination)
+outliers = iso.fit_predict(X_scaled)
+df['outlier'] = outliers
+
+# AutoML Random Forest Model Training
+rf = RandomForestRegressor(n_estimators=100)
+rf.fit(X_train, y_train)
+importances = rf.feature_importances_
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: Salary Manager Pro -->
+        <div class="card project-card">
+          <div class="project-info">
+            <div class="project-header">
+              <h3 class="project-title">Salary Manager Pro</h3>
+              <span class="project-stack">Python · Flask · SQLite · JavaScript · openpyxl</span>
+            </div>
+            <div class="project-desc">
+              <p>A business ledger bookkeeping and attendance management platform built with MVC structure, designed for SMEs to execute proportional payroll calculations and secure database backups.</p>
+              <ul>
+                <li>Engineered a secure <strong>multi-tenant workspace</strong> isolation architecture, leveraging SQLite database partitions and SQLAlchemy ORM cascading deletion rules.</li>
+                <li>Built a <strong>double-entry bookkeeping system</strong> strictly mapping debit and credit parameters to track real-time employee balances and salary accruals.</li>
+                <li>Implements an asynchronous background daemon thread that compiles database metrics into formatted multi-sheet Excel workbooks and uploads backups to Google Drive.</li>
+              </ul>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/SaranshAI13/Salary-Manager-Pro" target="_blank"><i class="fa-brands fa-github"></i> Source Code</a>
+              <a href="https://saranshnijhawan.pythonanywhere.com" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>
+            </div>
+          </div>
+          <div class="project-visual">
+            <div class="visual-glow" style="background: var(--green);"></div>
+            <div class="visual-code">
+# Double-Entry Ledger Calculation
+class LedgerEntry(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'))
+    type_ = db.Column(db.String(10))  # 'CR' or 'DR'
+    amount = db.Column(db.Integer)
+    is_salary = db.Column(db.Boolean, default=False)
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Skills Section ── -->
+  <section id="skills">
+    <div class="container">
+      <h2 class="section-title"><i class="fa-solid fa-brain" style="color: var(--amber);"></i> Technical Skills</h2>
+      
+      <div class="skills-wrapper">
+        
+        <div class="card">
+          <h3 class="skills-category-title"><i class="fa-solid fa-code" style="color: var(--amber);"></i> Languages</h3>
+          <div class="skills-list">
+            <span class="skill-chip">Python</span>
+            <span class="skill-chip">C++</span>
+            <span class="skill-chip">C</span>
+            <span class="skill-chip">SQL</span>
+            <span class="skill-chip">MATLAB</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="skills-category-title"><i class="fa-solid fa-cubes" style="color: var(--blue);"></i> ML & Libraries</h3>
+          <div class="skills-list">
+            <span class="skill-chip">Scikit-Learn</span>
+            <span class="skill-chip">SciPy</span>
+            <span class="skill-chip">Statsmodels</span>
+            <span class="skill-chip">Arch (GARCH)</span>
+            <span class="skill-chip">SHAP</span>
+            <span class="skill-chip">Pandas</span>
+            <span class="skill-chip">NumPy</span>
+            <span class="skill-chip">Plotly</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="skills-category-title"><i class="fa-solid fa-layer-group" style="color: var(--green);"></i> Core Competencies</h3>
+          <div class="skills-list">
+            <span class="skill-chip">Time-Series Analysis</span>
+            <span class="skill-chip">Portfolio Optimization</span>
+            <span class="skill-chip">Anomaly Detection</span>
+            <span class="skill-chip">Explainable AI (XAI)</span>
+            <span class="skill-chip">Data Structures & Algos</span>
+            <span class="skill-chip">Exploratory Data Analysis</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Achievements & Leadership Section ── -->
+  <section id="timeline">
+    <div class="container grid-2">
+      
+      <!-- Left Column: Leadership -->
+      <div>
+        <h2 class="section-title"><i class="fa-solid fa-people-group" style="color: var(--amber);"></i> Leadership</h2>
+        <div class="card" style="height: calc(100% - 86px);">
+          <div class="timeline-item">
+            <h3 class="timeline-title">President</h3>
+            <div class="timeline-sub">Society for Industrial and Applied Mathematics (SIAM-DTU) · 2024 - Present</div>
+            <p class="timeline-desc">
+              Led the DTU chapter of SIAM. Spearheaded the execution of <strong>'Financial Cricket'</strong> during Invictus (DTU's flagship technical fest), establishing it as the largest student-run financial simulation event across technical fests in India. Managed corporate sponsorships, external partnerships, and nationwide outreach.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Achievements -->
+      <div>
+        <h2 class="section-title"><i class="fa-solid fa-trophy" style="color: var(--amber);"></i> Achievements</h2>
+        <div class="card" style="height: calc(100% - 86px); display: flex; flex-direction: column; justify-content: center;">
+          
+          <div class="achievement-card">
+            <div class="achievement-icon"><i class="fa-solid fa-medal"></i></div>
+            <div class="achievement-info">
+              <h4>98.67 Percentile (JEE Mains 2023)</h4>
+              <p>Ranked in the top 1.5% nationwide (AIR 16,731 out of 1.2M candidates) and qualified for JEE Advanced 2023.</p>
+            </div>
+          </div>
+
+          <div class="achievement-card">
+            <div class="achievement-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="achievement-info">
+              <h4>Semi-Finalist (Smart India Hackathon 2024)</h4>
+              <p>Stood among the top national teams evaluated for data modeling and prototype execution.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://github.com/SaranshAI13" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="mailto:saranshnijhawan2005@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://www.linkedin.com/in/saransh-nijhawan" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+      <p class="footer-copy">Designed & Engineered by <strong>Saransh Nijhawan</strong></p>
+    </div>
+  </footer>
+
+  <script>
+    // Highlight active link in header on scroll
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (pageYOffset >= (sectionTop - 150)) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
