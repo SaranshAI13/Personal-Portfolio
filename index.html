@@ -329,33 +329,59 @@
     }
     .btn-ghost:hover { color: var(--text); }
 
-    /* ── Ticker ── */
-    .ticker-wrap {
+    /* ── Stats Strip ── */
+    .stats-strip {
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      overflow: hidden;
-      padding: 10px 0;
+      padding: 0;
+      background: rgba(0,255,136,0.015);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      divide: var(--border);
+    }
+    @media(max-width:768px){
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    .stat-item {
+      padding: 32px 20px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+      transition: background 0.3s;
       position: relative;
+      overflow: hidden;
     }
-    .ticker-track {
-      display: flex;
-      gap: 60px;
-      animation: ticker 25s linear infinite;
-      white-space: nowrap;
+    .stat-item:last-child { border-right: none; }
+    .stat-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--green);
+      transform: scaleX(0);
+      transition: transform 0.4s;
     }
-    .ticker-item {
+    .stat-item:hover { background: rgba(0,255,136,0.04); }
+    .stat-item:hover::after { transform: scaleX(1); }
+    .stat-num {
+      display: block;
       font-family: var(--mono);
-      font-size: 0.78rem;
-      color: var(--text-dim);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(0,255,136,0.4);
+      transition: text-shadow 0.3s;
     }
-    .ticker-item .up { color: var(--green); }
-    .ticker-item .down { color: var(--red); }
-    @keyframes ticker {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+    .stat-item:hover .stat-num { text-shadow: 0 0 30px rgba(0,255,136,0.7); }
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
     }
 
     /* ── Section base ── */
@@ -657,14 +683,10 @@
         <span class="line2">NIJHAWAN</span>
       </h1>
       <div class="hero-role">
-        <span>Quant &amp; ML Engineer</span>
-        <span class="sep">//</span>
-        <span>Risk Platform Builder</span>
-        <span class="sep">//</span>
-        <span>AI Systems</span>
+        <span>4th Year · DTU Mathematics &amp; Computing</span>
       </div>
       <p class="hero-desc">
-        Building <strong>quantitative risk engines</strong>, statistical forecasting pipelines, and ML-powered data platforms. Interested in <strong>Quant Finance, MLE</strong>, and applied AI.
+        Interested in <strong>Quant Finance, AI/ML, Gen AI</strong> and Data Science.<br>Open for <strong>SDE · MLE · Data roles</strong>.
       </p>
       <div class="hero-ctas">
         <a href="#projects" class="btn btn-primary"><i class="fa-solid fa-arrow-down"></i> View Work</a>
@@ -675,9 +697,27 @@
     </div>
   </section>
 
-  <!-- ── Ticker ── -->
-  <div class="ticker-wrap">
-    <div class="ticker-track" id="ticker"></div>
+  <!-- ── Stats Strip ── -->
+  <div class="stats-strip">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item" data-target="32" data-suffix=" Assets">
+          <span class="stat-num">0</span><span class="stat-label">Assets in MARI™</span>
+        </div>
+        <div class="stat-item" data-target="600" data-suffix="+">
+          <span class="stat-num">0</span><span class="stat-label">DSA Problems Solved</span>
+        </div>
+        <div class="stat-item" data-target="3" data-suffix=" Live">
+          <span class="stat-num">0</span><span class="stat-label">Deployed Projects</span>
+        </div>
+        <div class="stat-item" data-target="98.67" data-suffix="%" data-float="true">
+          <span class="stat-num">0</span><span class="stat-label">JEE Percentile</span>
+        </div>
+        <div class="stat-item" data-target="16731" data-suffix="" data-prefix="AIR ">
+          <span class="stat-num">0</span><span class="stat-label">JEE Mains Rank</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ── Projects ── -->
@@ -1039,27 +1079,33 @@ function drawBg(){
 drawBg();
 
 /* ────────────────────────────────
-   TICKER
+   ANIMATED STATS COUNTER
 ──────────────────────────────── */
-const tickerData = [
-  {sym:'NIFTY50',val:'24,850.65',chg:'+0.43%',up:true},
-  {sym:'SENSEX',val:'81,920.43',chg:'+0.38%',up:true},
-  {sym:'BTC/USD',val:'67,420.00',chg:'-1.12%',up:false},
-  {sym:'ETH/USD',val:'3,512.80',chg:'+2.05%',up:true},
-  {sym:'GOLD',val:'2,345.50',chg:'+0.21%',up:true},
-  {sym:'USD/INR',val:'83.42',chg:'-0.08%',up:false},
-  {sym:'AAPL',val:'189.30',chg:'+0.65%',up:true},
-  {sym:'SPY',val:'528.74',chg:'+0.22%',up:true},
-  {sym:'VIX',val:'13.45',chg:'-3.20%',up:false},
-];
-const track = document.getElementById('ticker');
-const items = [...tickerData,...tickerData].map(t=>{
-  return `<span class="ticker-item">
-    ${t.sym} &nbsp;<strong style="color:#fff">${t.val}</strong>&nbsp;
-    <span class="${t.up?'up':'down'}">${t.chg}</span>
-  </span>`;
-}).join('');
-track.innerHTML=items;
+const statItems = document.querySelectorAll('.stat-item');
+const countObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const numEl = el.querySelector('.stat-num');
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const prefix = el.dataset.prefix || '';
+    const isFloat = el.dataset.float === 'true';
+    const duration = 1800;
+    const start = performance.now();
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = target * eased;
+      numEl.textContent = prefix + (isFloat ? val.toFixed(2) : Math.floor(val).toLocaleString()) + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+    countObserver.unobserve(el);
+  });
+}, { threshold: 0.3 });
+statItems.forEach(el => countObserver.observe(el));
 
 /* ────────────────────────────────
    SCROLL REVEAL
