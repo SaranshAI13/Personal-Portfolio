@@ -329,65 +329,19 @@
     }
     .btn-ghost:hover { color: var(--text); }
 
-    /* ── Terminal Strip ── */
-    .terminal-strip {
+    /* ── Particle Strip ── */
+    .particle-strip {
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      background: #0a0f0a;
-      font-family: var(--mono);
-    }
-    .term-topbar {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 10px 18px;
-      border-bottom: 1px solid rgba(0,255,136,0.07);
-      background: rgba(255,255,255,0.02);
-    }
-    .term-btn {
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-      opacity: 0.8;
-    }
-    .term-title {
-      font-size: 0.72rem;
-      color: var(--text-dim);
-      margin-left: 8px;
-      letter-spacing: 1px;
-    }
-    .term-body {
-      padding: 18px 24px;
-      min-height: 130px;
-      max-height: 200px;
+      background: #03060d;
+      position: relative;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
     }
-    .term-line {
-      font-size: 0.82rem;
-      line-height: 1.6;
-      white-space: pre;
-      display: flex;
-      align-items: center;
-      gap: 0;
+    #p-canvas {
+      display: block;
+      width: 100%;
+      height: 200px;
     }
-    .term-prompt { color: rgba(0,255,136,0.7); margin-right: 6px; }
-    .term-cmd    { color: #e2e8f0; }
-    .term-out    { color: rgba(255,255,255,0.28); padding-left: 2px; }
-    .term-out.g  { color: rgba(0,255,136,0.5); }
-    .term-out.y  { color: rgba(255,170,0,0.55); }
-    .term-out.b  { color: rgba(56,178,248,0.55); }
-    .term-cursor {
-      display: inline-block;
-      width: 8px; height: 14px;
-      background: rgba(0,255,136,0.8);
-      margin-left: 2px;
-      animation: blink-cur 1s step-end infinite;
-      vertical-align: middle;
-    }
-    @keyframes blink-cur { 0%,100%{opacity:1} 50%{opacity:0} }
 
     /* ── Section base ── */
     section {
@@ -707,15 +661,9 @@
     </div>
   </section>
 
-  <!-- ── Terminal Strip ── -->
-  <div class="terminal-strip">
-    <div class="term-topbar">
-      <span class="term-btn" style="background:#ff5f57"></span>
-      <span class="term-btn" style="background:#febc2e"></span>
-      <span class="term-btn" style="background:#28c840"></span>
-      <span class="term-title">saransh@dev — zsh</span>
-    </div>
-    <div class="term-body" id="term-body"></div>
+  <!-- ── Particle Strip ── -->
+  <div class="particle-strip">
+    <canvas id="p-canvas"></canvas>
   </div>
 
   <!-- ── Projects ── -->
@@ -1081,131 +1029,119 @@ function drawBg(){
 drawBg();
 
 /* ────────────────────────────────
-   TERMINAL TYPEWRITER
+   PARTICLE CONSTELLATION
 ──────────────────────────────── */
 (function(){
-  const body = document.getElementById('term-body');
+  const cv = document.getElementById('p-canvas');
+  const cx = cv.getContext('2d');
+  let W, H, mouse = {x: -9999, y: -9999};
 
-  // script: each entry is either a command or an output line
-  const SCRIPT = [
-    {type:'cmd',  text:'python train.py --model garch --assets 32 --steps 252'},
-    {type:'out',  text:'[INFO] Loading 32 asset return series...', cls:'g'},
-    {type:'out',  text:'[INFO] Fitting GARCH(1,1)... done  (AIC: -4821.3)', cls:'g'},
-    {type:'out',  text:'[INFO] GBM baseline  vol=0.284  sharpe=1.47', cls:'y'},
-    {type:'out',  text:'[OK]   model checkpoint saved → ./ckpt/garch_v3.pkl', cls:'g'},
-    {type:'cmd',  text:'git add . && git commit -m "tuned ledoit-wolf shrinkage"'},
-    {type:'out',  text:'[master 3ecb96a] tuned ledoit-wolf shrinkage', cls:'b'},
-    {type:'out',  text:' 3 files changed, 47 insertions(+), 12 deletions(-)', cls:''},
-    {type:'cmd',  text:'python backtest.py --strategy risk_parity --start 2020'},
-    {type:'out',  text:'[INFO] Running walk-forward backtest over 1008 trading days', cls:'g'},
-    {type:'out',  text:'[INFO] Annualized Return: 18.3%  Max Drawdown: -9.1%', cls:'y'},
-    {type:'out',  text:'[INFO] Sharpe: 1.82  Calmar: 2.01  Sortino: 2.44', cls:'g'},
-    {type:'cmd',  text:'uvicorn main:app --host 0.0.0.0 --port 8000 --reload'},
-    {type:'out',  text:'INFO:     Uvicorn running on http://0.0.0.0:8000', cls:'b'},
-    {type:'out',  text:'INFO:     Started reloader process [PID 14291]', cls:''},
-    {type:'cmd',  text:'curl localhost:8000/api/portfolio/optimize'},
-    {type:'out',  text:'{"status":"ok","weights":{"SPY":0.31,"GLD":0.22,...}}', cls:'g'},
-    {type:'cmd',  text:'pytest tests/ -v --tb=short'},
-    {type:'out',  text:'tests/test_garch.py::test_vol_forecast   PASSED', cls:'g'},
-    {type:'out',  text:'tests/test_optimize.py::test_sharpe      PASSED', cls:'g'},
-    {type:'out',  text:'tests/test_api.py::test_health           PASSED', cls:'g'},
-    {type:'out',  text:'8 passed in 2.41s', cls:'y'},
-  ];
-
-  const CHAR_DELAY  = 28;   // ms per character (command typing)
-  const LINE_PAUSE  = 500;  // pause after output line
-  const CMD_PAUSE   = 900;  // pause before next command
-  const RESTART_GAP = 2200; // gap before loop restarts
-  const MAX_LINES   = 6;    // lines visible at once
-
-  let cursor = null;
-
-  function mkLine(cls) {
-    const d = document.createElement('div');
-    d.className = 'term-line';
-    if (cls) d.classList.add(cls);
-    body.appendChild(d);
-    // keep only MAX_LINES
-    while (body.children.length > MAX_LINES + 1) body.removeChild(body.firstChild);
-    return d;
+  function resize(){
+    W = cv.offsetWidth;
+    H = cv.offsetHeight;
+    cv.width  = W * devicePixelRatio;
+    cv.height = H * devicePixelRatio;
+    cx.scale(devicePixelRatio, devicePixelRatio);
   }
+  resize();
+  window.addEventListener('resize', ()=>{ resize(); spawnAll(); });
 
-  function removeCursor() {
-    if (cursor && cursor.parentNode) cursor.parentNode.removeChild(cursor);
-    cursor = null;
+  // track mouse relative to canvas
+  cv.parentElement.addEventListener('mousemove', e => {
+    const r = cv.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+  });
+  cv.parentElement.addEventListener('mouseleave', () => {
+    mouse.x = -9999; mouse.y = -9999;
+  });
+
+  const N = 90;
+  const CONNECT_DIST = 130;
+  const REPEL_DIST   = 80;
+  const REPEL_FORCE  = 0.25;
+  const SPEED        = 0.35;
+
+  let pts = [];
+
+  function rand(a, b){ return a + Math.random()*(b-a); }
+
+  function spawnAll(){
+    pts = Array.from({length: N}, () => ({
+      x:  rand(0, W),   y:  rand(0, H),
+      vx: rand(-SPEED, SPEED), vy: rand(-SPEED, SPEED),
+      r:  rand(1, 2.2),
+      // each point gets a hue slightly off from pure green for variety
+      hue: rand(140, 165),
+      alpha: rand(0.35, 0.75),
+    }));
   }
+  spawnAll();
 
-  function addCursor(parent) {
-    removeCursor();
-    cursor = document.createElement('span');
-    cursor.className = 'term-cursor';
-    parent.appendChild(cursor);
-  }
+  function tick(){
+    cx.clearRect(0, 0, W, H);
 
-  function typeCmd(text) {
-    return new Promise(resolve => {
-      const line = mkLine();
-      const prompt = document.createElement('span');
-      prompt.className = 'term-prompt';
-      prompt.textContent = '❯ ';
-      line.appendChild(prompt);
-      const cmd = document.createElement('span');
-      cmd.className = 'term-cmd';
-      line.appendChild(cmd);
-      addCursor(line);
+    // update & draw dots
+    pts.forEach(p => {
+      // repel from mouse
+      const dx = p.x - mouse.x;
+      const dy = p.y - mouse.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < REPEL_DIST && dist > 0){
+        const f = (REPEL_DIST - dist) / REPEL_DIST * REPEL_FORCE;
+        p.vx += (dx/dist) * f;
+        p.vy += (dy/dist) * f;
+      }
 
-      let i = 0;
-      function type() {
-        if (i < text.length) {
-          cmd.textContent += text[i++];
-          setTimeout(type, CHAR_DELAY + Math.random() * 18);
-        } else {
-          removeCursor();
-          setTimeout(resolve, 180);
+      // damping so velocity doesn't explode
+      p.vx *= 0.98;
+      p.vy *= 0.98;
+
+      // nudge back to base speed if too slow
+      const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+      if(spd < 0.05){
+        p.vx += rand(-0.05, 0.05);
+        p.vy += rand(-0.05, 0.05);
+      }
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // wrap edges
+      if(p.x < 0) p.x = W;
+      if(p.x > W) p.x = 0;
+      if(p.y < 0) p.y = H;
+      if(p.y > H) p.y = 0;
+
+      // draw dot
+      cx.beginPath();
+      cx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      cx.fillStyle = `hsla(${p.hue},100%,65%,${p.alpha})`;
+      cx.fill();
+    });
+
+    // draw connecting lines
+    for(let i = 0; i < pts.length; i++){
+      for(let j = i+1; j < pts.length; j++){
+        const a = pts[i], b = pts[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const d  = Math.sqrt(dx*dx + dy*dy);
+        if(d < CONNECT_DIST){
+          const opacity = (1 - d/CONNECT_DIST) * 0.18;
+          cx.beginPath();
+          cx.moveTo(a.x, a.y);
+          cx.lineTo(b.x, b.y);
+          cx.strokeStyle = `rgba(0,255,136,${opacity})`;
+          cx.lineWidth = 0.8;
+          cx.stroke();
         }
       }
-      type();
-    });
-  }
-
-  function showOut(text, cls) {
-    return new Promise(resolve => {
-      const line = mkLine();
-      const out = document.createElement('span');
-      out.className = 'term-out' + (cls ? ' ' + cls : '');
-      out.textContent = text;
-      line.appendChild(out);
-      setTimeout(resolve, LINE_PAUSE);
-    });
-  }
-
-  async function runScript() {
-    for (const entry of SCRIPT) {
-      if (entry.type === 'cmd') {
-        await new Promise(r => setTimeout(r, CMD_PAUSE));
-        await typeCmd(entry.text);
-      } else {
-        await showOut(entry.text, entry.cls);
-      }
     }
-    // show blinking cursor at end
-    const line = mkLine();
-    const prompt = document.createElement('span');
-    prompt.className = 'term-prompt';
-    prompt.textContent = '❯ ';
-    line.appendChild(prompt);
-    addCursor(line);
-    await new Promise(r => setTimeout(r, RESTART_GAP));
-    removeCursor();
-    // clear and loop
-    body.innerHTML = '';
-    runScript();
+
+    requestAnimationFrame(tick);
   }
-
-  runScript();
+  tick();
 })();
-
-
 
 /* ────────────────────────────────
    SCROLL REVEAL
